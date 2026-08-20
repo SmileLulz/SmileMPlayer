@@ -33,6 +33,35 @@ sudo pacman -S --needed pyside6 python-mutagen qt6-multimedia-gstreamer gst-plug
 ```
 
 
+# 📥 Install
+
+You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself. Below guide is for installing prebuilt binary.
+
+### Python PIP
+
+1. Download the `.whl` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
+
+2. Install:
+
+```sh
+# Install
+pip install /path/to/smilemplayer-x.x.x-py3-none-any.whl
+
+# Or install for current user only
+pip install --user /path/to/smilemplayer-x.x.x-py3-none-any.whl
+```
+
+### Arch Linux
+
+1. Download the `.tar.zst` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
+
+2. Install:
+
+```sh
+sudo pacman -U /path/to/smilemplayer-x.x.x-x-any.pkg.tar.zst
+```
+
+
 # 📦 Build
 
 **NOTE:** All below guides are wrote for/in Arch Linux; since I am using Arch, I can't test in other distros and can't guarentee that other guides than Arch will work correctly.
