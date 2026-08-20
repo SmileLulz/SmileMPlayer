@@ -1,3 +1,9 @@
+smilemplayer (0.7.5-1) bookworm; urgency=medium
+
+  * Version bump to 0.7.5
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 20 Aug 2026 21:18:38 +0530
+
 smilemplayer (0.7.1-1) unstable; urgency=medium
 
   * Version bump to 0.7.2

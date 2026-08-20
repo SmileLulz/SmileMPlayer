@@ -2,7 +2,7 @@
 # Contributor: SmileLulz
 
 pkgname=smilemplayer
-pkgver=0.7.2
+pkgver=0.7.5
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -12,7 +12,7 @@ license=('GPL-3.0-only')
 depends=(
     'python>=3.10'
     'pyside6>=6.8'
-    'python-mutagen'
+    'python-mutagen>=1.47'
     'qt6-multimedia-gstreamer'
     'gst-plugins-base'
     'gst-plugins-good'

@@ -3,8 +3,8 @@ import QtQuick
 
 QtObject {
     readonly property QtObject color: QtObject {
-        readonly property color accent: "#D0BCFF"
-        readonly property color accentDark: "#381E72"
+        readonly property color accent: "#FFB4C8"
+        readonly property color accentDark: "#6D2B4A"
 
         readonly property color background: "#1C1B1F"
         readonly property color backgroundLight: "#2B2930"
