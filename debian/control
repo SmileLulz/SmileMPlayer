@@ -1,0 +1,30 @@
+Source: smilemplayer
+Section: sound
+Priority: optional
+Maintainer: SmileLulz <SmileLulz@users.noreply.github.com>
+Build-Depends:
+    debhelper-compat (= 13),
+    python3,
+    python3-build,
+    python3-installer,
+    python3-wheel
+Standards-Version: 4.6.2
+
+Package: smilemplayer
+Architecture: all
+Depends:
+    python3,
+    python3-pyside6.qtcore,
+    python3-pyside6.qtgui,
+    python3-pyside6.qtqml,
+    python3-pyside6.qtmultimedia,
+    python3-pyside6.qtdbus,
+    python3-mutagen,
+    gstreamer,
+    gst-plugins-base,
+    gst-plugins-good,
+    gst-plugins-bad,
+    ${misc:Depends},
+    ${python3:Depends}
+Recommends: gst-libav
+Description: A simple and modern-looking playlist-based local music player.

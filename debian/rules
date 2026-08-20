@@ -1,0 +1,39 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	python3 -m build --wheel --no-isolation
+
+override_dh_auto_install:
+	rm -rf debian/smilemplayer
+
+	python3 -m installer \
+		--destdir=debian/smilemplayer \
+		--prefix=/usr \
+		--compile-bytecode=0 \
+		dist/*.whl
+
+	rm -rf debian/smilemplayer/usr/local
+
+	mkdir -p debian/smilemplayer/usr/bin
+
+	printf '#!/bin/sh\nexec python3 -m smilemplayer "$$@"\n' \
+		> debian/smilemplayer/usr/bin/smilemplayer
+
+	chmod +x debian/smilemplayer/usr/bin/smilemplayer
+
+	mkdir -p debian/smilemplayer/usr/share/applications
+	install -m644 data/smilemplayer.desktop debian/smilemplayer/usr/share/applications/
+
+	mkdir -p debian/smilemplayer/usr/share/icons/hicolor/256x256/apps
+	install -m644 data/icons/smilemplayer.png debian/smilemplayer/usr/share/icons/hicolor/256x256/apps/smilemplayer.png
+
+override_dh_builddeb:
+	dh_builddeb
+
+override_dh_auto_clean:
+	dh_clean
+	rm -rf dist build *.egg-info
+	rm -f ./smilemplayer_*.deb
