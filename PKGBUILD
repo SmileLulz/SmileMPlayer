@@ -2,7 +2,7 @@
 # Contributor: SmileLulz
 
 pkgname=smilemplayer
-pkgver=0.7.1
+pkgver=0.7.2
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -22,30 +22,33 @@ depends=(
 optdepends=('gst-libav')
 
 makedepends=(
+    'python-hatchling'
     'python-build'
     'python-installer'
     'python-wheel'
 )
 
-source=("$pkgname-$pkgver/" "smilemplayer.png")
-noextract=("$pkgname-$pkgver/")
-sha256sums=('SKIP' 'SKIP')
+source=()
+sha256sums=()
 
 build() {
-    cd "$srcdir/$pkgname-$pkgver"
+    cd "$startdir"
     python -m build --wheel --no-isolation
 }
 
 package() {
-    cd "$srcdir/$pkgname-$pkgver"
+    cd "$startdir"
 
     python -m installer --destdir="$pkgdir" dist/*.whl
 
-    install -Dm644 "data/smilemplayer.desktop" \
+    install -Dm644 data/icons/smilemplayer.png \
+        "$pkgdir/usr/share/icons/hicolor/256x256/apps/smilemplayer.png"
+
+    install -Dm644 data/smilemplayer.desktop \
         "$pkgdir/usr/share/applications/smilemplayer.desktop"
 
-    install -Dm644 "data/icons/smilemplayer.png" \
-        "$pkgdir/usr/share/icons/hicolor/256x256/apps/smilemplayer.png"
+    install -Dm644 LICENSE \
+        "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
 
 # cat > smilemplayer.desktop << EOF
