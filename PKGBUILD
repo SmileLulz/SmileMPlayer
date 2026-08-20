@@ -2,7 +2,7 @@
 # Contributor: SmileLulz
 
 pkgname=smilemplayer
-pkgver=0.7.0
+pkgver=0.7.1
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -12,8 +12,8 @@ license=('GPL-3.0-only')
 depends=(
     'python>=3.10'
     'pyside6>=6.8'
-    'mutagen'
-    'gstreamer'
+    'python-mutagen'
+    'qt6-multimedia-gstreamer'
     'gst-plugins-base'
     'gst-plugins-good'
     'gst-plugins-bad'
@@ -48,14 +48,14 @@ package() {
         "$pkgdir/usr/share/icons/hicolor/256x256/apps/smilemplayer.png"
 }
 
-cat > smilemplayer.desktop << EOF
-[Desktop Entry]
-Name=SmileMPlayer
-Comment=Simple local music player
-Exec=smilemplayer
-Icon=smilemplayer
-Terminal=false
-Type=Application
-Categories=AudioVideo;Player;
-MimeType=audio/mpeg;audio/flac;audio/ogg;audio/opus;audio/x-m4a;audio/aac;audio/wav;
-EOF
+# cat > smilemplayer.desktop << EOF
+# [Desktop Entry]
+# Name=SmileMPlayer
+# Comment=Simple local music player
+# Exec=smilemplayer
+# Icon=smilemplayer
+# Terminal=false
+# Type=Application
+# Categories=AudioVideo;Player;
+# MimeType=audio/mpeg;audio/flac;audio/ogg;audio/opus;audio/x-m4a;audio/aac;audio/wav;
+# EOF

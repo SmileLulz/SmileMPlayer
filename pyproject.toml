@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling>=1.25"]
-build-backend = "hatchling.build"
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "smilemplayer"
-version = "0.1.0"
+version = "0.7.1"
 description = "A simple and modern-looking playlist-based local music player for Linux"
 readme = "README.md"
 requires-python = ">=3.10"

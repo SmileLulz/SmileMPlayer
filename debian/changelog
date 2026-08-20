@@ -1,5 +1,11 @@
-smilemenu (0.7.0-1) unstable; urgency=medium
+smilemplayer (0.7.1-1) unstable; urgency=medium
+
+  * Version bump to 0.1.1
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 20 Aug 2026 19:54:08 +0530
+
+smilemplayer (0.7.0-1) unstable; urgency=medium
 
   Initial beta release.
 
- -- SmileLulz <SmileLulz@users.noreply.github.com>  Tue, 21 Jul 2026 02:11:29 +0530
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 20 Aug 2026 19:26:12 +0530
