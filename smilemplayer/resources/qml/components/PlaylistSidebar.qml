@@ -80,7 +80,6 @@ Rectangle {
                     anchors.fill: parent
                     anchors.leftMargin: 12
                     anchors.rightMargin: 10
-
                     spacing: 10
 
                     Text {

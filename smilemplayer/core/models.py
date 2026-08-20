@@ -13,6 +13,7 @@ class Track:
     album: str
     genre: str
     duration_ms: int
+    mtime: int = 0
     art_url: str = ""
 
     @property

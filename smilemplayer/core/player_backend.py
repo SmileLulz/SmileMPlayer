@@ -15,7 +15,7 @@ from .settings import AppSettings
 
 class PlayerBackend(QObject):
     """
-    Main player controller – handles playlist logic, playback, sorting,
+    Main player controller - handles playlist logic, playback, sorting,
     shuffle, loop mode, and exposes properties to QML.
     """
     currentTrackChanged = Signal()
@@ -29,6 +29,7 @@ class PlayerBackend(QObject):
     trackChanged = Signal(int)
     statusMessage = Signal(str)
     capabilitiesChanged = Signal()
+    sortKeyChanged = Signal()
 
     LOOP_MODES = ("none", "track", "playlist")
 
@@ -76,7 +77,7 @@ class PlayerBackend(QObject):
             if not tracks:
                 self.library.scanPlaylist(index)
 
-    # ---------- QML Properties ----------
+    # QML Properties
     @Property(QObject, constant=True)
     def playlistModelObject(self) -> QObject:
         return self.playlistModel
@@ -157,12 +158,16 @@ class PlayerBackend(QObject):
     @Property(bool, notify=capabilitiesChanged)
     def canGoNext(self) -> bool:
         return bool(self.library.current_tracks())
+    
+    @Property(str, notify=sortKeyChanged)
+    def sortKey(self) -> str:
+        return self._sort_key
 
     @property
     def current_track(self) -> Track | None:
         return self.playlistModel.track(self._current_index)
 
-    # ---------- Playback Control ----------
+    # Playback Control
     @Slot(int, bool)
     def playIndex(self, index: int, autoplay: bool = True) -> None:
         track = self.playlistModel.track(index)
@@ -248,7 +253,7 @@ class PlayerBackend(QObject):
     def _seek_internal(self, position_ms: int) -> None:
         self._media.seek(position_ms)
 
-    # ---------- Volume ----------
+    # Volume
     @Slot(float)
     def setVolume(self, value: float) -> None:
         value = max(0.0, min(1.0, float(value)))
@@ -260,7 +265,7 @@ class PlayerBackend(QObject):
     def _save_volume(self) -> None:
         self.settings.save()
 
-    # ---------- Shuffle ----------
+    # Shuffle
     @Slot()
     def toggleShuffle(self) -> None:
         self.setShuffle(not self._shuffle)
@@ -275,7 +280,7 @@ class PlayerBackend(QObject):
         self.settings.save()
         self.shuffleChanged.emit()
 
-    # ---------- Loop ----------
+    # Loop
     @Slot()
     def cycleLoopMode(self) -> None:
         index = self.LOOP_MODES.index(self._loop_mode)
@@ -292,10 +297,10 @@ class PlayerBackend(QObject):
         self.settings.save()
         self.loopModeChanged.emit()
 
-    # ---------- Sorting ----------
+    # Sorting
     @Slot(str)
     def sortCurrentPlaylist(self, key: str) -> None:
-        allowed = {"title", "artist", "filename", "duration"}
+        allowed = {"title", "artist", "filename", "mtime", "duration"}
         if key not in allowed or not self.library._tracks:
             return
 
@@ -308,7 +313,9 @@ class PlayerBackend(QObject):
             tracks.sort(key=lambda t: t.filename.casefold(), reverse=self._sort_desc)
         elif key == "artist":
             tracks.sort(key=lambda t: (t.artist.casefold(), t.title.casefold(), t.path.casefold()), reverse=self._sort_desc)
-        else:  # title
+        elif key == "mtime":
+            tracks.sort(key=lambda t: (t.mtime, t.title.casefold(), t.path.casefold()), reverse=self._sort_desc)
+        else:
             tracks.sort(key=lambda t: (t.title.casefold(), t.artist.casefold(), t.path.casefold()), reverse=self._sort_desc)
 
         self.library._tracks[self.library.currentPlaylist] = tracks
@@ -317,6 +324,8 @@ class PlayerBackend(QObject):
         self.settings.data["sort"] = key
         self.settings.data["sort_desc"] = self._sort_desc
         self.settings.save()
+
+        self.sortKeyChanged.emit()
 
         if current_path:
             self._current_index = next(
@@ -334,7 +343,7 @@ class PlayerBackend(QObject):
         self._sort_desc = not self._sort_desc
         self.sortCurrentPlaylist(self._sort_key)
 
-    # ---------- File Opening ----------
+    # File Opening
     @Slot(str)
     def openFile(self, file_url: str) -> None:
         url = QUrl(file_url)
@@ -350,13 +359,13 @@ class PlayerBackend(QObject):
                 return
         self.statusMessage.emit(f"File is not in the current playlist: {path.name}")
 
-    # ---------- Error Display ----------
+    # Error Display
     @Slot()
     def showError(self) -> None:
         if self._last_error:
             self.statusMessage.emit(self._last_error)
 
-    # ---------- Internal Signal Handlers ----------
+    # Internal Signal Handlers
     def _on_position(self, position: int) -> None:
         self._position_ms = position
         self.positionChanged.emit()
@@ -397,9 +406,14 @@ class PlayerBackend(QObject):
         self.durationChanged.emit()
         self.capabilitiesChanged.emit()
 
+        if self.library.current_tracks() and self._sort_key:
+            self.sortCurrentPlaylist(self._sort_key)
+
     def _on_playlist_scan_finished(self, playlist_name: str, count: int) -> None:
         if playlist_name == self.library.playlist_name(self.library.currentPlaylist):
             self.statusMessage.emit(f"{playlist_name}: {count} tracks")
+            if self._sort_key:
+                self.sortCurrentPlaylist(self._sort_key)
         self.capabilitiesChanged.emit()
 
     def _emit_track_signals(self) -> None:

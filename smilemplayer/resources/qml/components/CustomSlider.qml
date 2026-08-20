@@ -5,11 +5,12 @@ import ".."
 Slider {
     id: root
 
-    readonly property real trackThickness: 8
+    readonly property real trackThickness: 12
     readonly property real thumbWidth: 3
-    readonly property real thumbHeight: 28
+    readonly property real thumbHeight: 32
     readonly property real thumbGap: 4
-    readonly property real capsuleRadius: trackThickness / 2
+    readonly property real capsuleRadiusOutter: trackThickness / 2
+    readonly property real capsuleRadiusInner: trackThickness / 5
     readonly property real handleWidth: thumbWidth + 8
 
     readonly property real thumbCenterX:
@@ -34,9 +35,13 @@ Slider {
         height: root.trackThickness
 
         Rectangle {
+            clip: true
             width: root.leftWidth
             height: parent.height
-            radius: root.capsuleRadius
+            topLeftRadius: root.capsuleRadiusOutter
+            topRightRadius: root.capsuleRadiusInner
+            bottomLeftRadius: root.capsuleRadiusOutter
+            bottomRightRadius: root.capsuleRadiusInner
             color: Theme.color.accent
             anchors.left: parent.left
             anchors.top: parent.top
@@ -48,12 +53,29 @@ Slider {
                     easing.type: Easing.OutCubic
                 }
             }
+
+            Text {
+                text: ""
+                color: Theme.color.backgroundDarker
+                font.pixelSize: 8
+                horizontalAlignment: Text.AlignRight
+                verticalAlignment: Text.AlignVCenter
+                // visible: root.value > 0.1
+
+                anchors {
+                    fill: parent
+                    rightMargin: 4
+                }
+            }
         }
 
         Rectangle {
             width: root.rightWidth
             height: parent.height
-            radius: root.capsuleRadius
+            topLeftRadius: root.capsuleRadiusInner
+            topRightRadius: root.capsuleRadiusOutter
+            bottomLeftRadius: root.capsuleRadiusInner
+            bottomRightRadius: root.capsuleRadiusOutter
             color: Theme.color.backgroundLighter
             anchors.right: parent.right
             anchors.top: parent.top

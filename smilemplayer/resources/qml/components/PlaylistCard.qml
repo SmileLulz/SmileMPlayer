@@ -9,6 +9,12 @@ Rectangle {
     radius: 8
     color: Theme.color.backgroundLight
 
+    function getSortIndex(key) {
+        var mapping = ["title", "artist", "filename", "mtime", "duration"]
+        var idx = mapping.indexOf(key)
+        return idx >= 0 ? idx : 0
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 14
@@ -68,12 +74,12 @@ Rectangle {
                 parent: Overlay.overlay
                 width: 190
                 title: "Sort by"
-                model: ["Title", "Artist", "Filename", "Duration"]
+                model: ["Title", "Artist", "Filename", "MTime", "Duration"]
                 currentIndex: 0
 
                 onSelected: function(index) {
                     Api.player.sortCurrentPlaylist(
-                        ["title", "artist", "filename", "duration"][index]
+                        ["title", "artist", "filename", "mtime", "duration"][index]
                     )
                 }
             }
@@ -201,5 +207,16 @@ Rectangle {
                 font.pixelSize: Theme.font.sizeM
             }
         }
+    }
+
+    Connections {
+        target: Api.player
+        function onSortKeyChanged() {
+            sortMenu.currentIndex = getSortIndex(Api.player.sortKey)
+        }
+    }
+
+    Component.onCompleted: {
+        sortMenu.currentIndex = getSortIndex(Api.player.sortKey)
     }
 }

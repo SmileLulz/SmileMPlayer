@@ -113,6 +113,12 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
     resolved = str(Path(path).resolve())
     fallback_title = Path(path).stem
 
+    mtime = 0
+    try:
+        mtime = int(Path(path).stat().st_mtime)
+    except OSError:
+        pass
+
     try:
         audio = MutagenFile(path, easy=False)
     except (OSError, MutagenError, Exception) as e:
@@ -127,6 +133,7 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
             album="",
             genre="",
             duration_ms=0,
+            mtime=mtime,
             art_url="",
         )
 
@@ -160,5 +167,6 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
         album=album,
         genre=genre,
         duration_ms=duration_ms,
+        mtime=mtime,
         art_url=art_url,
     )

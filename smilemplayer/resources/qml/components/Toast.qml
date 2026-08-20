@@ -34,18 +34,18 @@ Rectangle {
         onTriggered: root.text = ""
     }
 
+    Text {
+        anchors.centerIn: parent
+        width: parent.width - 24
+        text: root.text
+        color: Theme.color.text
+        font.pixelSize: Theme.font.sizeM
+        horizontalAlignment: Text.AlignHCenter
+        elide: Text.ElideRight
+    }
+
     function show(message) {
         root.text = message
         timer.restart()
-    }
-
-    Text {
-        anchors.centerIn: parent
-        width: parent.width - 26
-        text: root.text
-        color: Theme.color.text
-        font.pixelSize: Theme.font.sizeS
-        horizontalAlignment: Text.AlignHCenter
-        elide: Text.ElideRight
     }
 }

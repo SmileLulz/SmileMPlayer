@@ -1,4 +1,4 @@
-> This project was meant to be a personal project, but I'm sharing anyways. Therefore, I am not accepting contributions. Thank you. Hope you like my app :)
+> ⚠︎ This project was meant to be a personal project, but I'm sharing anyways. Therefore, I am not accepting contributions. Thank you. Hope you like my app :)
 
 
 # ❤️ SmileMPlayer
@@ -15,10 +15,12 @@ A simple and playlist-based local music player for non-audiophiles.
 - All basic things, like cover art, controls, volume, etc...
 - See [TODO.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/TODO.md) for more planned features
 
+**See [CHANGELOG.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md) for latest update information.**
+
 
 # 🏞️ Screenshots
 
-| ![Screenshot 1](https://github.com/SmileLulz/SmileMPlayer/blob/main/Screenshots/0.png) | ![Screenshot 2](https://github.com/SmileLulz/SmileMPlayer/blob/main/Screenshots/1.png) |
+| ![Screenshot 1](https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png) | ![Screenshot 2](https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/1.png) |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 
 

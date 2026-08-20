@@ -1,6 +1,5 @@
 # TODO
 
-- Add mtime sorting
 - Implement ReplayGain 2.0 support
 - Select the last played track on restart
 - Add MPRIS support
