@@ -1,5 +1,11 @@
 # Changelogs
 
+### v1.2
+
+- Frontend changes:
+    - Fixed now-playing card's cover art sizing
+- Few changes in README.md
+
 ### v1.1
 
 - Backend changes:

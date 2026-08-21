@@ -1,5 +1,6 @@
 # TODO
 
+- Make a WIKI.md
 - Add some necessary settings on the status bar
     - Remove error message from status bar and add it into toast
 - Design an icon

@@ -30,7 +30,7 @@ A simple and modern-looking playlist-based local music player for Linux desktops
 
 All dependencies used as APIs, nothing is bundled.
 
-### Install (Arch Linux):
+### Install dependencies (Arch Linux):
 
 ```sh
 sudo pacman -S --needed \
@@ -47,7 +47,7 @@ sudo pacman -S --needed \
 
 # 📥 Install
 
-You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself. Below guide is for installing prebuilt binary.
+You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself. Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
 
 ### Python PIP
 

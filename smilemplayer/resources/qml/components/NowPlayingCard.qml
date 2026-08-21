@@ -61,10 +61,14 @@ Rectangle {
         spacing: 32
 
         Item {
-            Layout.preferredWidth: Math.min(250, Math.max(140, (root.width - 76) * 0.38))
-            Layout.preferredHeight: Layout.preferredWidth
-            Layout.minimumWidth: 140
-            Layout.minimumHeight: 140
+            Layout.preferredWidth: Math.min(400, parent.height)
+            Layout.preferredHeight: Math.min(400, parent.height)
+
+            Layout.minimumWidth: Math.min(100, parent.height)
+            Layout.minimumHeight: Math.min(100, parent.height)
+
+            Layout.maximumWidth: parent.height
+            Layout.maximumHeight: parent.height
 
             Rectangle {
                 anchors.fill: parent
@@ -85,8 +89,10 @@ Rectangle {
                     anchors.fill: parent
                     visible: false
                     source: Api.player.coverArt
-                    sourceSize.width: width
-                    sourceSize.height: height
+                    sourceSize: Qt.size(
+                        Math.ceil(width * Screen.devicePixelRatio),
+                        Math.ceil(height * Screen.devicePixelRatio)
+                    )
                     fillMode: Image.PreserveAspectCrop
                     asynchronous: true
                     cache: true
@@ -108,7 +114,7 @@ Rectangle {
                     anchors.centerIn: parent
                     text: ""
                     color: Theme.color.accent
-                    font.pixelSize: 72
+                    font.pixelSize: Math.min(72, height * 0.3)
                     visible: coverArt.status !== Image.Ready
                 }
             }
