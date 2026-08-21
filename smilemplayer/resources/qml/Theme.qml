@@ -20,6 +20,7 @@ QtObject {
 
     readonly property QtObject font: QtObject {
         readonly property int sizeS: 12
+        readonly property int sizeMS: 13
         readonly property int sizeM: 15
         readonly property int sizeL: 18
         readonly property int sizeXL: 21

@@ -3,6 +3,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import mimetypes
+import struct
 import sys
 from pathlib import Path
 from typing import Any
@@ -16,8 +17,7 @@ from .replaygain import read_replaygain
 
 
 def _first_tag(tags: Any, *keys: str, default: str = "") -> str:
-    """
-    Return the first non-empty tag value from the given keys.
+    """Return the first non-empty tag value from the given keys.
     Handles mutagen's VorbisComment which raises ValueError for missing keys.
     """
     if not tags:
@@ -44,7 +44,6 @@ def _extract_cover_data(audio: Any) -> tuple[bytes, str] | None:
     if not tags:
         return None
 
-    # MP3 / ID3 APIC
     try:
         for value in tags.values():
             if value.__class__.__name__ == "APIC" and getattr(value, "data", None):
@@ -52,7 +51,6 @@ def _extract_cover_data(audio: Any) -> tuple[bytes, str] | None:
     except Exception:
         pass
 
-    # iTunes / MP4 covr
     try:
         cover_values = tags.get("covr") if tags else None
         if cover_values:
@@ -63,7 +61,6 @@ def _extract_cover_data(audio: Any) -> tuple[bytes, str] | None:
     except Exception:
         pass
 
-    # FLAC / Ogg FLAC pictures
     try:
         pictures = getattr(audio, "pictures", None) or []
         if pictures:
@@ -72,7 +69,6 @@ def _extract_cover_data(audio: Any) -> tuple[bytes, str] | None:
     except Exception:
         pass
 
-    # CoverArt (some formats)
     try:
         encoded = tags.get("coverart") if tags else None
         if encoded:
@@ -81,7 +77,6 @@ def _extract_cover_data(audio: Any) -> tuple[bytes, str] | None:
     except Exception:
         pass
 
-    # METADATA_BLOCK_PICTURE (Vorbis/FLAC)
     try:
         encoded = tags.get("metadata_block_picture")
         if encoded:
@@ -106,9 +101,37 @@ def _cover_cache_url(cache_dir: Path, data: bytes, mime: str) -> str:
     return out.as_uri()
 
 
-def read_track(path: str, cache_dir: Path) -> Track | None:
+def _read_opus_output_gain_db(path: str) -> float:
+    """Read the OpusHead output-gain field, if this file contains one.
+
+    Ogg Opus and Matroska/WebM Opus both carry the Opus identification packet
+    as codec private data. The field is a signed little-endian Q7.8 dB value.
+    FFmpeg/Qt applies this gain during decoding; we only retain it as metadata
+    so ReplayGain clipping protection can account for the already-applied gain.
     """
-    Read one audio file and return a Track object.
+    try:
+        with open(path, "rb") as handle:
+            data = handle.read(128 * 1024)
+    except OSError:
+        return 0.0
+
+    offset = data.find(b"OpusHead")
+    while offset >= 0:
+        header = data[offset:offset + 19]
+        if len(header) == 19 and header[:8] == b"OpusHead":
+            version = header[8]
+            channels = header[9]
+            if version < 16 and 1 <= channels <= 255:
+                try:
+                    return struct.unpack_from("<h", header, 16)[0] / 256.0
+                except struct.error:
+                    return 0.0
+        offset = data.find(b"OpusHead", offset + 1)
+    return 0.0
+
+
+def read_track(path: str, cache_dir: Path) -> Track | None:
+    """Read one audio file and return a Track object.
     If reading fails, return a fallback Track with minimal metadata.
     """
     resolved = str(Path(path).resolve())
@@ -119,7 +142,6 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
         mtime = int(Path(path).stat().st_mtime)
     except OSError:
         pass
-
     try:
         audio = MutagenFile(path, easy=False)
     except (OSError, MutagenError, Exception) as e:
@@ -139,12 +161,17 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
         )
 
     tags = getattr(audio, "tags", None)
-
     title = _first_tag(tags, "title", "TIT2", "©nam", default=fallback_title)
     artist = _first_tag(tags, "artist", "TPE1", "©ART", "albumartist", "TPE2", "aART")
     album = _first_tag(tags, "album", "TALB", "©alb")
     genre = _first_tag(tags, "genre", "TCON", "©gen")
-    replaygain = read_replaygain(tags)
+    codec_gain_db = 0.0
+    try:
+        if Path(path).suffix.lower() in {".opus", ".oga", ".ogg", ".mka", ".webm"}:
+            codec_gain_db = _read_opus_output_gain_db(path)
+    except Exception:
+        codec_gain_db = 0.0
+    replaygain = read_replaygain(tags, codec_gain_db=codec_gain_db)
 
     duration_ms = 0
     try:

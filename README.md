@@ -30,10 +30,11 @@ A simple and modern-looking playlist-based local music player for Linux desktops
 
 All dependencies used as APIs, nothing is bundled.
 
-Install (Arch Linux):
+### Install (Arch Linux):
 
 ```sh
 sudo pacman -S --needed \
+    python \
     pyside6 \
     python-mutagen \
     python-dbus-next \
@@ -56,10 +57,10 @@ You can either choose to install the prebuilt binary from the [Releases](https:/
 
 ```sh
 # Install
-pip install /path/to/smilemplayer-x.x.x-py3-none-any.whl
+pip install /path/to/smilemplayer-x.x-py3-none-any.whl
 
 # Or install for current user only
-pip install --user /path/to/smilemplayer-x.x.x-py3-none-any.whl
+pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
 ```
 
 ### Arch Linux
@@ -69,7 +70,7 @@ pip install --user /path/to/smilemplayer-x.x.x-py3-none-any.whl
 2. Install:
 
 ```sh
-sudo pacman -U /path/to/smilemplayer-x.x.x-x-any.pkg.tar.zst
+sudo pacman -U /path/to/smilemplayer-x.x-1-any.pkg.tar.zst
 ```
 
 

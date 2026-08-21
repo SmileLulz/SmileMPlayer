@@ -1,5 +1,15 @@
 # Changelogs
 
+### v1.1
+
+- Backend changes:
+    - Fixed some ReplayGain issues
+- Frontend changes:
+    - Made track list responsive grid-based view, with scrollbar support
+    - Added keyboard support to track list and now-playing card
+    - Solved focusing issues
+- Few changes in README.md
+
 ### v1.0
 
 - Added complete MPRIS integration (hopefully)

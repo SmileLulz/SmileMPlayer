@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Effects
 import QtQuick.Layouts
 import ".."
@@ -7,6 +6,9 @@ import "."
 
 Rectangle {
     id: root
+    objectName: "Now Playing"
+
+    readonly property alias rootAlias: root
 
     topLeftRadius: 8
     topRightRadius: 28
@@ -14,6 +16,44 @@ Rectangle {
     bottomRightRadius: 8
 
     color: Theme.color.backgroundLight
+
+    activeFocusOnTab: true
+
+    Keys.onPressed: (event) => {
+        if (event.key === Qt.Key_Space) {
+            Api.player.playPause()
+            event.accepted = true
+        } else if (event.key === Qt.Key_Right) {
+            Api.player.seek(Api.player.position + 5000)
+            event.accepted = true
+        } else if (event.key === Qt.Key_Left) {
+            Api.player.seek(Math.max(0, Api.player.position - 5000))
+            event.accepted = true
+        } else if (event.key === Qt.Key_Up) {
+            Api.player.setVolume(Math.min(1, Api.player.volume + 0.05))
+            event.accepted = true
+        } else if (event.key === Qt.Key_Down) {
+            Api.player.setVolume(Math.max(0, Api.player.volume - 0.05))
+            event.accepted = true
+        } else if (event.key === Qt.Key_N) {
+            Api.player.next()
+            event.accepted = true
+        } else if (event.key === Qt.Key_P) {
+            Api.player.previous()
+            event.accepted = true
+        } else if (event.key === Qt.Key_S) {
+            Api.player.toggleShuffle()
+            event.accepted = true
+        } else if (event.key === Qt.Key_L) {
+            Api.player.cycleLoopMode()
+            event.accepted = true
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: root.forceActiveFocus()
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -25,32 +65,6 @@ Rectangle {
             Layout.preferredHeight: Layout.preferredWidth
             Layout.minimumWidth: 140
             Layout.minimumHeight: 140
-
-            // Rectangle {
-            //     anchors.fill: parent
-            //     radius: 22
-            //     color: Theme.color.backgroundDarker
-            //     clip: true
-
-            //     Image {
-            //         id: coverArt
-            //         anchors.fill: parent
-            //         source: Api.player.coverArt
-            //         sourceSize.width: width
-            //         sourceSize.height: height
-            //         fillMode: Image.PreserveAspectCrop
-            //         asynchronous: true
-            //         cache: true
-            //     }
-
-            //     Text {
-            //         anchors.centerIn: parent
-            //         text: ""
-            //         color: Theme.color.accent
-            //         font.pixelSize: 72
-            //         visible: coverArt.status !== Image.Ready
-            //     }
-            // }
 
             Rectangle {
                 anchors.fill: parent

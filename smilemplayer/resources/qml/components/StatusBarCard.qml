@@ -5,6 +5,8 @@ import ".."
 Rectangle {
     id: root
 
+    property string focusedItemText: ""
+
     topLeftRadius: 8
     topRightRadius: 8
     bottomLeftRadius: 8
@@ -35,11 +37,20 @@ Rectangle {
         Item { Layout.fillWidth: true }
 
         Text {
-            Layout.maximumWidth: 460
+            Layout.maximumWidth: 400
             text: Api.player.lastError
             color: Theme.color.error
             font.pixelSize: Theme.font.sizeS
             elide: Text.ElideRight
+        }
+
+        Text {
+            Layout.maximumWidth: 200
+            text: root.focusedItemText ? "Focus: " + root.focusedItemText : ""
+            color: Theme.color.textSecondary
+            font.pixelSize: Theme.font.sizeS
+            elide: Text.ElideRight
+            visible: root.focusedItemText !== ""
         }
     }
 }

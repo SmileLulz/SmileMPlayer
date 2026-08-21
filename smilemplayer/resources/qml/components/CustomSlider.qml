@@ -28,6 +28,8 @@ Slider {
 
     implicitHeight: Math.max(thumbHeight, trackThickness + 12)
 
+    focusPolicy: Qt.NoFocus
+
     background: Item {
         x: root.leftPadding
         y: (root.height - height) / 2

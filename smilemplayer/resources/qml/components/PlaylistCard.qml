@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -6,6 +8,9 @@ import ".."
 Rectangle {
     id: root
 
+    property int minColumnWidth: 270
+    readonly property alias tracksViewAlias: tracksView
+
     radius: 8
     color: Theme.color.backgroundLight
 
@@ -13,6 +18,11 @@ Rectangle {
         var mapping = ["title", "artist", "filename", "mtime", "duration"]
         var idx = mapping.indexOf(key)
         return idx >= 0 ? idx : 0
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: tracksView.forceActiveFocus()
     }
 
     ColumnLayout {
@@ -27,10 +37,6 @@ Rectangle {
             Text {
                 Layout.fillWidth: true
                 text: "Tracks"
-                // text: Api.library.playlistNames.length > 0
-                //       ? Api.library.playlistNames[Api.library.currentPlaylist]
-                //       : "Playlist"
-
                 color: Theme.color.text
                 font.pixelSize: Theme.font.sizeM
                 font.bold: true
@@ -42,7 +48,6 @@ Rectangle {
                 color: Api.player.playing
                        ? Theme.color.accent
                        : Theme.color.textSecondary
-
                 font.pixelSize: Theme.font.sizeS
                 font.bold: true
             }
@@ -85,14 +90,101 @@ Rectangle {
             }
         }
 
-        ListView {
+        GridView {
             id: tracksView
+            objectName: "Playlist Grid"
             Layout.fillWidth: true
             Layout.fillHeight: true
             clip: true
-            spacing: 4
+            activeFocusOnTab: true
+            focus: true
+
+            readonly property int columns: Math.max(1, Math.floor(width / root.minColumnWidth))
+
+            cellWidth: width / columns
+            cellHeight: 72
 
             model: Api.player.playlistModelObject
+
+            property int selectedIndex: -1
+
+            // Scrollbar
+            ScrollBar.vertical: ScrollBar {
+                id: vScroll
+                policy: ScrollBar.AsNeeded
+                visible: true
+                interactive: true
+                opacity: hovered ? 1.0 : 0.0
+
+                Behavior on opacity { NumberAnimation { duration: 150 } }
+
+                background: Rectangle {
+                    implicitWidth: 14
+                    color: "transparent"
+                }
+
+                contentItem: Rectangle {
+                    implicitWidth: 6
+                    radius: width / 2
+                    color: Theme.color.textSecondary
+                    opacity: 0.6
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+            // Keyboard navigation
+            Keys.onPressed: (event) => {
+                if (tracksView.count === 0) return
+
+                const current = tracksView.selectedIndex
+                let next = current
+
+                switch (event.key) {
+                    case Qt.Key_Down:
+                        next = current + tracksView.columns
+                        break
+                    case Qt.Key_Up:
+                        next = current - tracksView.columns
+                        break
+                    case Qt.Key_Right:
+                        if (tracksView.columns > 1)
+                            next = current + 1
+                        else
+                            return
+                        break
+                    case Qt.Key_Left:
+                        if (tracksView.columns > 1)
+                            next = current - 1
+                        else
+                            return
+                        break
+                    case Qt.Key_Return:
+                    case Qt.Key_Enter:
+                    case Qt.Key_Space:
+                        if (current >= 0 && current < tracksView.count) {
+                            Api.player.playIndex(current, true)
+                            event.accepted = true
+                        }
+                        return
+                    default:
+                        return
+                }
+
+                if (next < 0) next = 0
+                if (next >= tracksView.count) next = tracksView.count - 1
+
+                if (next !== current) {
+                    tracksView.selectedIndex = next
+                    tracksView.positionViewAtIndex(next, GridView.Contain)
+                    event.accepted = true
+                }
+            }
+
+            function setSelectedIndexByTrack(index) {
+                tracksView.selectedIndex = index
+                tracksView.forceActiveFocus()
+                tracksView.positionViewAtIndex(index, GridView.Contain)
+            }
 
             delegate: Rectangle {
                 required property string path
@@ -103,31 +195,38 @@ Rectangle {
                 required property string artUrl
                 required property int trackIndex
 
-                width: tracksView.width
-                height: 64
+                width: tracksView.cellWidth - 8
+                height: tracksView.cellHeight - 8
                 radius: 14
-                color: trackIndex === Api.player.currentIndex
+
+                readonly property bool isPlaying: trackIndex === Api.player.currentIndex
+                readonly property bool isSelected: trackIndex === tracksView.selectedIndex
+
+                color: isPlaying
                        ? Theme.color.backgroundLighter
-                       : trackMouse.containsMouse
-                         ? Qt.lighter(
-                               Theme.color.backgroundLighter,
-                               1.08
-                           )
-                         : "transparent"
+                       : isSelected
+                         ? Qt.lighter(Theme.color.backgroundLighter, 1.15)
+                         : trackMouse.containsMouse
+                           ? Qt.lighter(Theme.color.backgroundLighter, 1.08)
+                           : "transparent"
+
+                border.width: isSelected ? 2 : 0
+                border.color: isSelected ? Theme.color.border : "transparent"
 
                 RowLayout {
                     anchors.fill: parent
-                    anchors.leftMargin: 8
-                    anchors.rightMargin: 14
-                    spacing: 12
+                    anchors.leftMargin: 10
+                    anchors.rightMargin: 10
+                    spacing: 10
 
+                    // Cover art
                     Item {
-                        Layout.preferredWidth: 48
-                        Layout.preferredHeight: 48
+                        Layout.preferredWidth: 40
+                        Layout.preferredHeight: 40
 
                         Rectangle {
                             anchors.fill: parent
-                            radius: 10
+                            radius: 8
                             color: Theme.color.backgroundDarker
                             clip: true
 
@@ -135,8 +234,8 @@ Rectangle {
                                 id: artwork
                                 anchors.fill: parent
                                 source: artUrl
-                                sourceSize.width: 160
-                                sourceSize.height: 160
+                                sourceSize.width: 120
+                                sourceSize.height: 120
                                 fillMode: Image.PreserveAspectCrop
                                 asynchronous: true
                                 cache: true
@@ -146,27 +245,25 @@ Rectangle {
                                 anchors.centerIn: parent
                                 text: ""
                                 color: Theme.color.textSecondary
-                                font.pixelSize: Theme.font.sizeXXL
+                                font.pixelSize: Theme.font.sizeL
                                 visible: artwork.status !== Image.Ready
                             }
                         }
                     }
 
+                    // Title and artist
                     ColumnLayout {
                         Layout.fillWidth: true
                         Layout.minimumWidth: 0
-                        spacing: 2
+                        spacing: 0
 
                         Text {
                             Layout.fillWidth: true
                             Layout.minimumWidth: 0
                             text: title
                             color: Theme.color.text
-                            // color: trackIndex === Api.player.currentIndex
-                            //        ? Theme.color.text
-                            //        : Theme.color.textSecondary
-
-                            font.pixelSize: Theme.font.sizeM
+                            font.pixelSize: Theme.font.sizeMS
+                            font.bold: true
                             elide: Text.ElideRight
                         }
 
@@ -180,6 +277,7 @@ Rectangle {
                         }
                     }
 
+                    // Duration
                     Text {
                         text: Api.formatTime(durationMs)
                         color: Theme.color.textSecondary
@@ -191,8 +289,12 @@ Rectangle {
                     id: trackMouse
                     anchors.fill: parent
                     hoverEnabled: true
+
+                    onClicked: {
+                        tracksView.setSelectedIndexByTrack(trackIndex)
+                        Api.player.playIndex(trackIndex, false)
+                    }
                     onDoubleClicked: Api.player.playIndex(trackIndex, true)
-                    onClicked: Api.player.playIndex(trackIndex, false)
                 }
             }
 
@@ -202,7 +304,6 @@ Rectangle {
                 text: Api.library.playlistNames.length === 0
                       ? "Add a music folder"
                       : "No playable audio files found"
-
                 color: Theme.color.textSecondary
                 font.pixelSize: Theme.font.sizeM
             }
@@ -212,11 +313,15 @@ Rectangle {
     Connections {
         target: Api.player
         function onSortKeyChanged() {
-            sortMenu.currentIndex = getSortIndex(Api.player.sortKey)
+            sortMenu.currentIndex = root.getSortIndex(Api.player.sortKey)
         }
     }
 
     Component.onCompleted: {
         sortMenu.currentIndex = getSortIndex(Api.player.sortKey)
+        if (tracksView.count > 0) {
+            tracksView.selectedIndex = 0
+            tracksView.positionViewAtIndex(0, GridView.Contain)
+        }
     }
 }
