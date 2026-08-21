@@ -29,7 +29,7 @@ makedepends=(
 )
 
 source=()
-sha256sums=('SKIP')
+sha256sums=()
 
 build() {
     cd "$startdir"

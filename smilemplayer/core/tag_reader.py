@@ -12,11 +12,12 @@ from mutagen.flac import Picture
 from mutagen._util import MutagenError
 
 from .models import Track
+from .replaygain import read_replaygain
 
 
 def _first_tag(tags: Any, *keys: str, default: str = "") -> str:
     """
-    Return the first non‑empty tag value from the given keys.
+    Return the first non-empty tag value from the given keys.
     Handles mutagen's VorbisComment which raises ValueError for missing keys.
     """
     if not tags:
@@ -143,6 +144,7 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
     artist = _first_tag(tags, "artist", "TPE1", "©ART", "albumartist", "TPE2", "aART")
     album = _first_tag(tags, "album", "TALB", "©alb")
     genre = _first_tag(tags, "genre", "TCON", "©gen")
+    replaygain = read_replaygain(tags)
 
     duration_ms = 0
     try:
@@ -169,4 +171,5 @@ def read_track(path: str, cache_dir: Path) -> Track | None:
         duration_ms=duration_ms,
         mtime=mtime,
         art_url=art_url,
+        replaygain=replaygain,
     )

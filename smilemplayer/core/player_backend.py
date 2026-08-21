@@ -10,13 +10,14 @@ from .library import LibraryManager
 from .media_player import MediaPlayer
 from .models import Track
 from .playlist_model import PlaylistModel
+from .replaygain import effective_volume
 from .settings import AppSettings
 
 
 class PlayerBackend(QObject):
     """
     Main player controller - handles playlist logic, playback, sorting,
-    shuffle, loop mode, and exposes properties to QML.
+    shuffle, loop mode, ReplayGain normalization, and exposes properties to QML.
     """
     currentTrackChanged = Signal()
     positionChanged = Signal()
@@ -30,8 +31,10 @@ class PlayerBackend(QObject):
     statusMessage = Signal(str)
     capabilitiesChanged = Signal()
     sortKeyChanged = Signal()
+    replayGainChanged = Signal()
 
     LOOP_MODES = ("none", "track", "playlist")
+    REPLAYGAIN_MODES = ("track", "album")
 
     def __init__(self, library: LibraryManager, settings: AppSettings, parent: QObject | None = None) -> None:
         super().__init__(parent)
@@ -46,7 +49,16 @@ class PlayerBackend(QObject):
         self._media.mediaStatusChanged.connect(self._on_media_status)
         self._media.errorOccurred.connect(self._on_error)
         self._media.sourceChanged.connect(lambda _: self.currentTrackChanged.emit())
-        self._media.setVolume(max(0.0, min(1.0, float(settings.data.get("volume", 0.8)))))
+
+        self._master_volume = max(0.0, min(1.0, float(settings.data.get("volume", 0.8))))
+        self._media.setVolume(self._master_volume)
+
+        self._replaygain_enabled = bool(settings.data.get("replaygain_enabled", True))
+        replaygain_mode = str(settings.data.get("replaygain_mode", "track"))
+        self._replaygain_mode = replaygain_mode if replaygain_mode in self.REPLAYGAIN_MODES else "track"
+        self._replaygain_preamp_db = float(settings.data.get("replaygain_preamp_db", 0.0))
+        self._master_gain_db = float(settings.data.get("master_gain_db", 0.0))
+        self._replaygain_prevent_clipping = bool(settings.data.get("replaygain_prevent_clipping", True))
 
         self._current_index = -1
         self._position_ms = 0
@@ -121,7 +133,7 @@ class PlayerBackend(QObject):
 
     @Property(float, notify=volumeChanged)
     def volume(self) -> float:
-        return self._media.volume()
+        return self._master_volume
 
     @volume.setter
     def volume(self, value: float) -> None:
@@ -143,6 +155,51 @@ class PlayerBackend(QObject):
     def loopMode(self, value: str) -> None:
         self.setLoopMode(value)
 
+    @Property(bool, notify=replayGainChanged)
+    def replayGainEnabled(self) -> bool:
+        return self._replaygain_enabled
+
+    @replayGainEnabled.setter
+    def replayGainEnabled(self, value: bool) -> None:
+        self.setReplayGainEnabled(value)
+
+    @Property(str, notify=replayGainChanged)
+    def replayGainMode(self) -> str:
+        return self._replaygain_mode
+
+    @replayGainMode.setter
+    def replayGainMode(self, value: str) -> None:
+        self.setReplayGainMode(value)
+
+    @Property(float, notify=replayGainChanged)
+    def replayGainPreampDb(self) -> float:
+        return self._replaygain_preamp_db
+
+    @Property(bool, notify=replayGainChanged)
+    def replayGainPreventClipping(self) -> bool:
+        return self._replaygain_prevent_clipping
+
+    @Property(float, notify=replayGainChanged)
+    def masterGainDb(self) -> float:
+        return self._master_gain_db
+
+    @masterGainDb.setter
+    def masterGainDb(self, value: float) -> None:
+        self.setMasterGainDb(value)
+
+    @Property(str, notify=currentTrackChanged)
+    def replayGainSource(self) -> str:
+        track = self.current_track
+        return track.replaygain.source if track else ""
+
+    @Property(float, notify=currentTrackChanged)
+    def currentReplayGainDb(self) -> float:
+        track = self.current_track
+        if not track:
+            return 0.0
+        gain = track.replaygain.gain_db(self._replaygain_mode)
+        return float(gain) if gain is not None else 0.0
+
     @Property(str, notify=errorChanged)
     def lastError(self) -> str:
         return self._last_error
@@ -158,7 +215,7 @@ class PlayerBackend(QObject):
     @Property(bool, notify=capabilitiesChanged)
     def canGoNext(self) -> bool:
         return bool(self.library.current_tracks())
-    
+
     @Property(str, notify=sortKeyChanged)
     def sortKey(self) -> str:
         return self._sort_key
@@ -176,6 +233,7 @@ class PlayerBackend(QObject):
         self._current_index = index
         self._position_ms = 0
         self._duration_ms = track.duration_ms
+        self._apply_replaygain()
         self._media.setSource(QUrl.fromLocalFile(track.path))
         if autoplay:
             self._media.play()
@@ -257,13 +315,89 @@ class PlayerBackend(QObject):
     @Slot(float)
     def setVolume(self, value: float) -> None:
         value = max(0.0, min(1.0, float(value)))
-        self._media.setVolume(value)
+        self._master_volume = value
+        self._apply_replaygain()
         self.settings.data["volume"] = value
         self._volume_save_timer.start()
+        self.volumeChanged.emit()
 
     @Slot()
     def _save_volume(self) -> None:
         self.settings.save()
+
+    # ReplayGain
+    def _apply_replaygain(self) -> None:
+        track = self.current_track
+        if not self._replaygain_enabled or not track:
+            self._media.setVolume(self._master_volume)
+            return
+
+        gain = track.replaygain.gain_db(self._replaygain_mode)
+        peak = track.replaygain.peak(self._replaygain_mode)
+        volume = effective_volume(
+            master_volume=self._master_volume,
+            gain_db=gain,
+            peak=peak,
+            prevent_clipping=self._replaygain_prevent_clipping,
+            preamp_db=self._replaygain_preamp_db,
+            master_gain_db=self._master_gain_db,
+        )
+        self._media.setVolume(volume)
+
+    @Slot(bool)
+    def setReplayGainEnabled(self, value: bool) -> None:
+        value = bool(value)
+        if value == self._replaygain_enabled:
+            return
+        self._replaygain_enabled = value
+        self.settings.data["replaygain_enabled"] = value
+        self.settings.save()
+        self._apply_replaygain()
+        self.replayGainChanged.emit()
+
+    @Slot(str)
+    def setReplayGainMode(self, value: str) -> None:
+        if value not in self.REPLAYGAIN_MODES or value == self._replaygain_mode:
+            return
+        self._replaygain_mode = value
+        self.settings.data["replaygain_mode"] = value
+        self.settings.save()
+        self._apply_replaygain()
+        self.replayGainChanged.emit()
+        self.currentTrackChanged.emit()
+
+    @Slot(float)
+    def setReplayGainPreampDb(self, value: float) -> None:
+        value = float(value)
+        if value == self._replaygain_preamp_db:
+            return
+        self._replaygain_preamp_db = value
+        self.settings.data["replaygain_preamp_db"] = value
+        self.settings.save()
+        self._apply_replaygain()
+        self.replayGainChanged.emit()
+
+    @Slot(float)
+    def setMasterGainDb(self, value: float) -> None:
+        value = max(-12.0, min(12.0, float(value)))
+        if value == self._master_gain_db:
+            return
+        self._master_gain_db = value
+        self.settings.data["master_gain_db"] = value
+        self.settings.save()
+        self._apply_replaygain()
+        self.replayGainChanged.emit()
+
+    @Slot(bool)
+    def setReplayGainPreventClipping(self, value: bool) -> None:
+        value = bool(value)
+        if value == self._replaygain_prevent_clipping:
+            return
+        self._replaygain_prevent_clipping = value
+        self.settings.data["replaygain_prevent_clipping"] = value
+        self.settings.save()
+        self._apply_replaygain()
+        self.replayGainChanged.emit()
 
     # Shuffle
     @Slot()
@@ -337,6 +471,7 @@ class PlayerBackend(QObject):
 
         self.trackChanged.emit(self._current_index)
         self.currentTrackChanged.emit()
+        self._apply_replaygain()
 
     @Slot()
     def toggleSortDirection(self) -> None:
@@ -400,6 +535,7 @@ class PlayerBackend(QObject):
         self._current_index = -1
         self._position_ms = 0
         self._duration_ms = 0
+        self._media.setVolume(self._master_volume)
         self.trackChanged.emit(-1)
         self.currentTrackChanged.emit()
         self.positionChanged.emit()
@@ -422,3 +558,4 @@ class PlayerBackend(QObject):
         self.positionChanged.emit()
         self.durationChanged.emit()
         self.capabilitiesChanged.emit()
+        self.replayGainChanged.emit()

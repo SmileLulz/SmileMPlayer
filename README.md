@@ -3,7 +3,7 @@
 
 # ❤️ SmileMPlayer
 
-A simple and playlist-based local music player for non-audiophiles.
+A simple and modern-looking playlist-based local music player for Linux desktops. For non-audiophiles.
 
 
 ### ✨ Features
@@ -12,6 +12,7 @@ A simple and playlist-based local music player for non-audiophiles.
 - Folder-based playlist management
 - Playlist-based single track list
 - Tracks sorting
+- ReplayGain 2.0 support
 - All basic things, like cover art, controls, volume, etc...
 - See [TODO.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/TODO.md) for more planned features
 

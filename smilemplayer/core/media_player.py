@@ -36,8 +36,7 @@ class MediaPlayer(QObject):
         self._last_error = error_string
         self.errorOccurred.emit(error_string)
 
-    # ---- Public API ----
-
+    # Public API
     def setSource(self, url: QUrl) -> None:
         self._player.setSource(url)
 
@@ -70,7 +69,7 @@ class MediaPlayer(QObject):
         return self._audio_output.volume()
 
     def setVolume(self, volume: float) -> None:
-        self._audio_output.setVolume(volume)
+        self._audio_output.setVolume(max(0.0, min(1.0, float(volume))))
 
     @property
     def last_error(self) -> str:

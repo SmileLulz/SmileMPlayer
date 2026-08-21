@@ -15,8 +15,13 @@ class AppSettings:
         "sort_desc": False,
         "shuffle": False,
         "loop": "none",
-        "volume": 0.8,
+        "volume": 0.5,
         "theme": "",
+        "replaygain_enabled": True,
+        "replaygain_mode": "track",
+        "replaygain_preamp_db": 0.0,
+        "master_gain_db": 4.0,
+        "replaygain_prevent_clipping": True,
     }
 
     def __init__(self, config_dir: str) -> None:
