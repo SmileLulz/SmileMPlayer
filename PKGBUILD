@@ -2,7 +2,7 @@
 # Contributor: SmileLulz
 
 pkgname=smilemplayer
-pkgver=0.8.0
+pkgver=0.8.1
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -29,7 +29,7 @@ makedepends=(
 )
 
 source=()
-sha256sums=()
+sha256sums=('SKIP')
 
 build() {
     cd "$startdir"
@@ -50,15 +50,3 @@ package() {
     install -Dm644 LICENSE \
         "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
-
-# cat > smilemplayer.desktop << EOF
-# [Desktop Entry]
-# Name=SmileMPlayer
-# Comment=Simple local music player
-# Exec=smilemplayer
-# Icon=smilemplayer
-# Terminal=false
-# Type=Application
-# Categories=AudioVideo;Player;
-# MimeType=audio/mpeg;audio/flac;audio/ogg;audio/opus;audio/x-m4a;audio/aac;audio/wav;
-# EOF
