@@ -11,8 +11,9 @@ A simple and modern-looking playlist-based local music player for Linux desktops
 - Fully customizable/themable via QML
 - Folder-based playlist management
 - Playlist-based single track list
-- Tracks sorting
+- Sorting
 - ReplayGain 2.0 support
+- MPRIS integration
 - All basic things, like cover art, controls, volume, etc...
 - See [TODO.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/TODO.md) for more planned features
 
@@ -32,7 +33,14 @@ All dependencies used as APIs, nothing is bundled.
 Install (Arch Linux):
 
 ```sh
-sudo pacman -S --needed pyside6 python-mutagen qt6-multimedia-gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
+sudo pacman -S --needed \
+    pyside6 \
+    python-mutagen \
+    python-dbus-next \
+    qt6-multimedia-gstreamer \
+    gst-plugins-base \
+    gst-plugins-good \
+    gst-plugins-bad
 ```
 
 

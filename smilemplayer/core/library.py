@@ -3,9 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from PySide6.QtCore import (
-    QObject, Property, QThread, QUrl, Signal, Slot, QStandardPaths
-)
+from PySide6.QtCore import (QObject, Property, QThread, QUrl, Signal, Slot, QStandardPaths)
 
 from .models import Track
 from .playlist_model import PlaylistModel
@@ -22,6 +20,7 @@ class LibraryManager(QObject):
     currentPlaylistChanged = Signal()
     scanStarted = Signal(str)
     scanFinished = Signal(str, int)
+    rescanStarted = Signal()
     errorMessage = Signal(str)
 
     def __init__(self, settings: AppSettings, parent: QObject | None = None) -> None:
@@ -42,7 +41,7 @@ class LibraryManager(QObject):
 
         self._load_from_settings()
 
-    # ---------- Private ----------
+    # Private
     def _load_from_settings(self) -> None:
         folders = self.settings.data.get("folders", [])
         if isinstance(folders, list):
@@ -102,7 +101,7 @@ class LibraryManager(QObject):
             if 0 <= next_index < len(self._folders):
                 self._start_scan(next_index)
 
-    # ---------- QML Properties ----------
+    # QML Properties
     @Property("QStringList", notify=playlistsChanged)
     def playlistNames(self) -> list[str]:
         return list(self._names)
@@ -111,7 +110,7 @@ class LibraryManager(QObject):
     def currentPlaylist(self) -> int:
         return self._current_index
 
-    # ---------- Public Slots ----------
+    # Public Slots
     @Slot(str)
     def addFolder(self, folder: str) -> None:
         if str(folder).startswith("file:"):
@@ -171,10 +170,11 @@ class LibraryManager(QObject):
 
     @Slot()
     def rescanCurrent(self) -> None:
-        if self._folders:
+        if self._folders and 0 <= self._current_index < len(self._folders):
+            self.rescanStarted.emit()
             self.scanPlaylist(self._current_index)
 
-    # ---------- Scan Scheduling ----------
+    # Scan Scheduling
     def scanPlaylist(self, index: int) -> None:
         if not 0 <= index < len(self._folders):
             return
@@ -185,7 +185,7 @@ class LibraryManager(QObject):
             return
         self._start_scan(index)
 
-    # ---------- Query Methods ----------
+    # Query Methods
     def current_tracks(self) -> list[Track]:
         return list(self._tracks[self._current_index]) if self._tracks else []
 

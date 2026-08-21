@@ -11,6 +11,7 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
 from .core.library import LibraryManager
+from .core.mpris import MprisServer
 from .core.player_backend import PlayerBackend
 from .core.settings import AppSettings
 
@@ -25,7 +26,6 @@ def _xdg_data_dirs() -> list[str]:
     for entry in os.environ.get("XDG_DATA_DIRS", "/usr/local/share:/usr/share").split(":"):
         if entry:
             result.append(entry)
-
     seen: set[str] = set()
     unique: list[str] = []
     for entry in result:
@@ -40,7 +40,6 @@ def generate_theme(source_dir: Path, target_dir: Path) -> None:
     if not source_dir.exists():
         print(f"Error: Source directory {source_dir} does not exist.", file=sys.stderr)
         sys.exit(1)
-
     target_dir.mkdir(parents=True, exist_ok=True)
     shutil.copytree(source_dir, target_dir, dirs_exist_ok=True, symlinks=False)
     print(f"Theme files generated successfully in: {target_dir}")
@@ -50,7 +49,6 @@ def main() -> int:
     QCoreApplication.setOrganizationName("SmileLulz")
     QCoreApplication.setOrganizationDomain("smilemplayer.local")
     QCoreApplication.setApplicationName("SmileMPlayer")
-
     parser = argparse.ArgumentParser(description="SmileMPlayer - A simple playlist-based local music player")
     parser.add_argument(
          "-gt", "--gen-theme",
@@ -60,7 +58,6 @@ def main() -> int:
     args = parser.parse_args()
 
     config_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ConfigLocation)) / "SmileMPlayer"
-
     if args.gen_theme:
         source_root = Path(__file__).resolve().parent / "resources" / "qml"
         target_root = config_dir / "theme"
@@ -71,7 +68,6 @@ def main() -> int:
         os.environ.setdefault("QT_MEDIA_BACKEND", "gstreamer")
 
     app = QGuiApplication(sys.argv)
-
     desktop_file_installed = any(
         (Path(base) / "applications" / "smilemplayer.desktop").is_file()
         for base in _xdg_data_dirs()
@@ -82,11 +78,14 @@ def main() -> int:
     settings = AppSettings(str(config_dir))
     library = LibraryManager(settings)
     backend = PlayerBackend(library, settings)
+    mpris = MprisServer(backend)
+    if not mpris.start():
+        print("Warning: MPRIS support could not be started.", file=sys.stderr)
+    app.aboutToQuit.connect(mpris.stop)
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty("player", backend)
     engine.rootContext().setContextProperty("library", library)
-
     custom_theme = settings.data.get("theme", "")
     if custom_theme and Path(custom_theme).expanduser().is_file():
         theme_path = Path(custom_theme).expanduser().resolve()

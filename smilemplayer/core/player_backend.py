@@ -78,6 +78,7 @@ class PlayerBackend(QObject):
         self._volume_save_timer.timeout.connect(self._save_volume)
 
         self.library.scanFinished.connect(self._on_playlist_scan_finished)
+        self.library.rescanStarted.connect(self._on_playlist_rescan_started)
         self.library.currentPlaylistChanged.connect(self._on_playlist_changed)
 
     def startup(self) -> None:
@@ -267,10 +268,6 @@ class PlayerBackend(QObject):
     def next(self) -> None:
         tracks = self.library.current_tracks()
         if not tracks:
-            return
-        if self._loop_mode == "track" and self._current_index >= 0:
-            self._seek_internal(0)
-            self._media.play()
             return
         if self._shuffle and len(tracks) > 1:
             candidates = [i for i in range(len(tracks)) if i != self._current_index]
@@ -550,6 +547,20 @@ class PlayerBackend(QObject):
             self.statusMessage.emit(f"{playlist_name}: {count} tracks")
             if self._sort_key:
                 self.sortCurrentPlaylist(self._sort_key)
+        self.capabilitiesChanged.emit()
+    
+    def _on_playlist_rescan_started(self) -> None:
+        self._media.stop()
+        self._current_index = -1
+        self._position_ms = 0
+        self._duration_ms = 0
+
+        self._media.setVolume(self._master_volume)
+
+        self.trackChanged.emit(-1)
+        self.currentTrackChanged.emit()
+        self.positionChanged.emit()
+        self.durationChanged.emit()
         self.capabilitiesChanged.emit()
 
     def _emit_track_signals(self) -> None:

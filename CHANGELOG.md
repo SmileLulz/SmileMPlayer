@@ -1,5 +1,12 @@
 # Changelogs
 
+### v1.0
+
+- Added complete MPRIS integration (hopefully)
+- Fixed next/previous not working because of loop state
+- Fixed a playlist refreshing issue where it's automatically selecting random tracks when refreshing
+- Changed version format of the project from Semantic Versioning to Dotted-Decimal Notation (two integer)
+
 ### v0.9.0
 
 - Implemented ReplayGain 2.0 support

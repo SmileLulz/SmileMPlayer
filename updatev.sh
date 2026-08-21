@@ -19,10 +19,9 @@ NC='\033[0m'
 usage() {
     cat << EOF
 Usage:
-  $0 1|--major           Bump major version (1.4.3 -> 2.0.0)
-  $0 2|--minor           Bump minor version (1.4.3 -> 1.5.0)
-  $0 3|--patch           Bump patch version (1.4.3 -> 1.4.4)
-  $0 -s|--set X.Y.Z      Set explicit version
+  $0 1|--major           Bump major version (1.2 -> 2.0)
+  $0 2|--minor           Bump minor version (1.2 -> 1.3)
+  $0 -s|--set X.Y        Set explicit version (two parts)
 EOF
     exit 1
 }
@@ -39,12 +38,11 @@ bump_version() {
     local current="$1"
     local type="$2"
 
-    IFS='.' read -r major minor patch <<< "$current"
+    IFS='.' read -r major minor <<< "$current"
 
     case "$type" in
-        major) echo "$((major + 1)).0.0" ;;
-        minor) echo "${major}.$((minor + 1)).0" ;;
-        patch) echo "${major}.${minor}.$((patch + 1))" ;;
+        major) echo "$((major + 1)).0" ;;
+        minor) echo "${major}.$((minor + 1))" ;;
     esac
 }
 
@@ -85,12 +83,11 @@ if [[ $# -lt 1 ]]; then
 fi
 
 case "$1" in
-    1|--major|2|--minor|3|--patch)
+    1|--major|2|--minor)
         current_version=$(get_current_version)
         case "$1" in
             1|--major) new_version=$(bump_version "$current_version" "major") ; bump_type="major" ;;
             2|--minor) new_version=$(bump_version "$current_version" "minor") ; bump_type="minor" ;;
-            3|--patch) new_version=$(bump_version "$current_version" "patch") ; bump_type="patch" ;;
         esac
         echo -e "${YELLOW}Bumping ${bump_type} version: ${current_version} -> ${new_version}${NC}"
         ;;
@@ -108,8 +105,8 @@ case "$1" in
         ;;
 esac
 
-if ! [[ "$new_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo -e "${RED}Error: Invalid version format. Use X.Y.Z${NC}"
+if ! [[ "$new_version" =~ ^[0-9]+\.[0-9]+$ ]]; then
+    echo -e "${RED}Error: Invalid version format. Use X.Y (two parts)${NC}"
     exit 1
 fi
 
