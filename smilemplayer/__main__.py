@@ -78,10 +78,18 @@ def main() -> int:
     settings = AppSettings(str(config_dir))
     library = LibraryManager(settings)
     backend = PlayerBackend(library, settings)
-    mpris = MprisServer(backend)
-    if not mpris.start():
-        print("Warning: MPRIS support could not be started.", file=sys.stderr)
-    app.aboutToQuit.connect(mpris.stop)
+    mpris_server = None
+
+    if settings.data.get("mpris_enabled", True):
+        mpris_server = MprisServer(backend)
+        mpris_server.start()
+    
+    app.aboutToQuit.connect(lambda: mpris_server.stop() if mpris_server is not None else None)
+
+    # if not mpris_server.start():
+    #     print("Warning: MPRIS support could not be started.", file=sys.stderr)
+
+    # app.aboutToQuit.connect(mpris_server.stop)
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty("player", backend)

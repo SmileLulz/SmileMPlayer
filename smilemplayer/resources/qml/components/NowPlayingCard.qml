@@ -8,8 +8,6 @@ Rectangle {
     id: root
     objectName: "Now Playing"
 
-    readonly property alias rootAlias: root
-
     topLeftRadius: 8
     topRightRadius: 28
     bottomLeftRadius: 8
@@ -114,7 +112,7 @@ Rectangle {
                     anchors.centerIn: parent
                     text: ""
                     color: Theme.color.accent
-                    font.pixelSize: Math.min(72, height * 0.3)
+                    font.pixelSize: Math.max(48, Math.min(300, parent.height * 0.4))
                     visible: coverArt.status !== Image.Ready
                 }
             }

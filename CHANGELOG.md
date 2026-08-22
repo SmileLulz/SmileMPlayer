@@ -1,5 +1,14 @@
 # Changelogs
 
+### v1.3
+
+- Backend changes:
+    - Added MPRIS integration setting
+- Frontend changes:
+    - Did some changes on now-playing card
+- Designed a final icon/logo
+- Added WIKI.md
+
 ### v1.2
 
 - Frontend changes:

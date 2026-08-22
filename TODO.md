@@ -1,11 +1,5 @@
 # TODO
 
-- Make a WIKI.md
-- Add some necessary settings on the status bar
-    - Remove error message from status bar and add it into toast
-- Design an icon
-- Add setting to toggle MPRIS integration
-- Select the last played track on restart/launch
-- Add tray icon & control options
+- Add background play, tray icon and control options (not gonna happen soon)
 
-> Points are removed after completion
+> Points are removed after completion or decision-change

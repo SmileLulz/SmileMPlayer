@@ -17,6 +17,7 @@ class AppSettings:
         "loop": "none",
         "volume": 0.5,
         "theme": "",
+        "mpris_enabled": True,
         "replaygain_enabled": True,
         "replaygain_mode": "track",
         "replaygain_preamp_db": 0.0,
