@@ -7,6 +7,16 @@ import "."
 ApplicationWindow {
     id: root
 
+    FontLoader {
+        id: regularFont
+        source: "fonts/JetBrainsMonoNerdFont-Regular.ttf"
+    }
+
+    FontLoader {
+        id: boldFont
+        source: "fonts/JetBrainsMonoNerdFont-Bold.ttf"
+    }
+
     width: 1220
     height: 760
     minimumWidth: 900

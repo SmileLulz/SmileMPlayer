@@ -2,7 +2,7 @@
 # Contributor: SmileLulz
 
 pkgname=smilemplayer
-pkgver=1.3
+pkgver=1.4
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -14,13 +14,7 @@ depends=(
     'pyside6>=6.8'
     'python-mutagen>=1.47'
     'python-dbus-next>=0.2.3'
-    'qt6-multimedia-gstreamer'
-    'gst-plugins-base'
-    'gst-plugins-good'
-    'gst-plugins-bad'
 )
-
-optdepends=('gst-libav')
 
 makedepends=(
     'python-hatchling'

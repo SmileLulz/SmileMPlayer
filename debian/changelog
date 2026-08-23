@@ -1,3 +1,15 @@
+smilemplayer (1.4-1) bookworm; urgency=medium
+
+  * Version bump to 1.4
+  * Backend changes:
+    * Removed explicit GStreamer backend
+    * Less dependencies because of no explicit GStreamer backend
+  * Frontend changes:
+    * Added default nerd font (JetBainsMonoNerdFont) for glyphs support for systems that doesn't have any nerd fonts installed
+  * Some changes in README.md
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sun, 23 Aug 2026 22:16:29 +0530
+
 smilemplayer (1.3-1) bookworm; urgency=medium
 
   * Version bump to 1.3

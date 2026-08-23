@@ -64,8 +64,8 @@ def main() -> int:
         generate_theme(source_root, target_root)
         return 0
 
-    if sys.platform.startswith("linux"):
-        os.environ.setdefault("QT_MEDIA_BACKEND", "gstreamer")
+    # if sys.platform.startswith("linux"):
+    #     os.environ.setdefault("QT_MEDIA_BACKEND", "gstreamer")
 
     app = QGuiApplication(sys.argv)
     desktop_file_installed = any(
@@ -83,7 +83,7 @@ def main() -> int:
     if settings.data.get("mpris_enabled", True):
         mpris_server = MprisServer(backend)
         mpris_server.start()
-    
+
     app.aboutToQuit.connect(lambda: mpris_server.stop() if mpris_server is not None else None)
 
     # if not mpris_server.start():

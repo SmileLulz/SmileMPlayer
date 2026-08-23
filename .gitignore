@@ -1,6 +1,10 @@
 # Customs
-0-backup/
 0-aur-test/
+debian/.debhelper/
+debian/smilemplayer/
+debian/debhelper-build-stamp
+debian/files
+debian/*.substvars
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

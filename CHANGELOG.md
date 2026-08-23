@@ -1,5 +1,14 @@
 # Changelogs
 
+### v1.4
+
+- Backend changes:
+  - Removed explicit GStreamer backend
+  - Less dependencies because of no explicit GStreamer backend
+- Frontend changes:
+  - Added default nerd font (JetBainsMonoNerdFont) for glyphs support for systems that doesn't have any nerd fonts installed
+- Some changes in README.md
+
 ### v1.3
 
 - Backend changes:

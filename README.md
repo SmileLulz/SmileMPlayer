@@ -28,26 +28,42 @@ A simple and modern-looking playlist-based local music player for Linux desktops
 
 # 🔗 Dependencies
 
-All dependencies used as APIs, nothing is bundled.
+All dependencies used as APIs, no packages are bundled.
 
-### Install dependencies (Arch Linux):
+⚠︎ Dependencies will auto-install during app installation, no need to install them manually.
 
-```sh
-sudo pacman -S --needed \
-    python \
-    pyside6 \
-    python-mutagen \
-    python-dbus-next \
-    qt6-multimedia-gstreamer \
-    gst-plugins-base \
-    gst-plugins-good \
-    gst-plugins-bad
-```
+### Python PIP
+
+- `pyside6-essentials`
+- `pyside6-addons`
+- `mutagen`
+- `dbus-next`
+
+### Arch Linux:
+
+- `python`
+- `pyside6`
+- `python-mutagen`
+- `python-dbus-next`
+
+### Debian
+
+- `python3`
+- `python3-pyside6.qtcore`
+- `python3-pyside6.qtgui`
+- `python3-pyside6.qtqml`
+- `python3-pyside6.qtmultimedia`
+- `python3-pyside6.qtdbus`
+- `python3-pyside6.qtwidgets`
+- `python3-mutagen`
+- `python3-dbus-next`
 
 
 # 📥 Install
 
-You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself. Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
+You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself.
+
+Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
 
 ### Python PIP
 
@@ -73,10 +89,18 @@ pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
 sudo pacman -U /path/to/smilemplayer-x.x-1-any.pkg.tar.zst
 ```
 
+### Debian
+
+1. Download the `.deb` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
+
+2. Install:
+
+```sh
+sudo apt install /path/to/smilemplayer_x.x-1_all.deb
+```
+
 
 # 📦 Build
-
-**NOTE:** All below guides are wrote for/in Arch Linux; since I am using Arch, I can't test in other distros and can't guarentee that other guides than Arch will work correctly.
 
 ### Clone the repository
 
@@ -84,7 +108,7 @@ sudo pacman -U /path/to/smilemplayer-x.x-1-any.pkg.tar.zst
 git clone https://github.com/SmileLulz/SmileMPlayer.git && cd SmileMPlayer
 ```
 
-### Running from source
+### Running directly
 
 ```sh
 python -m smilemplayer
@@ -99,7 +123,7 @@ python -m build
 # Install locally
 python -m pip install .
 
-# For development
+# Install locally for development
 python -m pip install -e .
 ```
 
@@ -119,5 +143,38 @@ sudo pacman -S --needed python-hatchling python-build python-installer python-wh
 Build and install:
 
 ```sh
+# Build
+makepkg -s
+
+# Install
+sudo pacman -U smilemplayer-x.x-1-any.pkg.tar.zst
+
+# Or build & install on one go
 makepkg -si
+```
+
+### Build for Debian
+
+Dependencies:
+
+- `build-essential`
+- `debhelper`
+- `python3`
+- `python3-build`
+- `python3-installer`
+- `python3-wheel`
+- `python3-hatchling`
+
+```sh
+sudo apt install build-essential debhelper python3 python3-build python3-installer python3-wheel python3-hatchling
+```
+
+Build and install:
+
+```sh
+# Build
+dpkg-buildpackage -b -us -uc
+
+# Install
+sudo apt install ../smilemplayer_x.x-1_all.deb
 ```

@@ -30,6 +30,9 @@ override_dh_auto_install:
 	mkdir -p debian/smilemplayer/usr/share/icons/hicolor/256x256/apps
 	install -m644 data/icons/smilemplayer.png debian/smilemplayer/usr/share/icons/hicolor/256x256/apps/smilemplayer.png
 
+	mkdir -p debian/smilemplayer/usr/share/licenses/smilemplayer
+	install -m644 LICENSE debian/smilemplayer/usr/share/licenses/smilemplayer/LICENSE
+
 override_dh_builddeb:
 	dh_builddeb
 
