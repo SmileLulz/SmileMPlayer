@@ -1,29 +1,32 @@
-> ⚠︎ This project was meant to be a personal project, but I'm sharing anyways. Therefore, I am not accepting contributions. Thank you. Hope you like my app :)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/data/icons/smilemplayer-512.png" width="150px" alt="SmileMPlayer" />
+  <h1>🎵 SmileMPlayer 🎵</h1>
+  <h3>
+    A simple and modern-looking playlist-based local music player for Linux desktops.
+    <br/>For non-audiophiles.<br>
+  </h3>
+  <br></br>
+  <img alt="SmileMPlayer Logo" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
+</div>
 
+<br></br>
 
-# ❤️ SmileMPlayer
+> [!WARNING]
+> This project was meant to be a personal project, but thought it would be nice to share with others.
+> 
+> By the way, I am not accepting contributions. Thank you. Hope you like my app :)
 
-A simple and modern-looking playlist-based local music player for Linux desktops. For non-audiophiles.
-
-
-### ✨ Features
+# ✨ Features
 
 - Fully customizable/themable via QML
 - Folder-based playlist management
-- Playlist-based single track list
-- Sorting
+- Tracks sorting
 - ReplayGain 2.0 support
 - MPRIS integration
 - All basic things, like cover art, controls, volume, etc...
 - See [TODO.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/TODO.md) for more planned features
 
-**See [CHANGELOG.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md) for latest update information.**
-
-
-# 🏞️ Screenshots
-
-| ![Screenshot 1](https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png) | ![Screenshot 2](https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/1.png) |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+**See [CHANGELOG.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md) for latest update information. See [WIKI.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md) for more help.**
 
 
 # 🔗 Dependencies
@@ -39,7 +42,7 @@ All dependencies used as APIs, no packages are bundled.
 - `mutagen`
 - `dbus-next`
 
-### Arch Linux:
+### Arch Linux
 
 - `python`
 - `pyside6`
