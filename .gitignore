@@ -11,6 +11,9 @@ rpm/BUILDROOT/
 rpm/RPMS/
 rpm/SOURCES/
 rpm/SRPMS/
+review-smilemplayer/
+/*.spec
+/*.rpm
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

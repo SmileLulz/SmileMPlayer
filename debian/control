@@ -26,6 +26,6 @@ Depends:
     ${misc:Depends},
     ${python3:Depends}
 Description: Modern playlist-based local music player
- SmileMPlayer is a simple and modern local music player for Linux with playlist
- management, cover art, ReplayGain support, shuffle and loop playback, and
- MPRIS integration.
+ SmileMPlayer is a simple and modern playlist-based local music player for Linux
+ with ReplayGain support, MPRIS integration, fully customizable UI,
+ Material You theme by default, and more.

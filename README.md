@@ -19,6 +19,7 @@
 # ✨ Features
 
 - Fully customizable/themable via QML
+- Material You theme by default
 - Folder-based playlist management
 - Tracks sorting
 - ReplayGain 2.0 support
@@ -61,7 +62,7 @@ All dependencies used as APIs, no packages are bundled.
 > ⚠︎ Manual nerd font installation required.
 
 ```sh
-wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && cd ~/.local/share/fonts && unzip JetBrainsMono.zip && rm JetBrainsMono.zip && fc-cache -fv
+mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
 ```
 
 - `python3`
@@ -79,7 +80,7 @@ wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/la
 > ⚠︎ Manual nerd font installation required.
 
 ```sh
-wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && cd ~/.local/share/fonts && unzip JetBrainsMono.zip && rm JetBrainsMono.zip && fc-cache -fv
+mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
 ```
 
 - `python3`
@@ -185,17 +186,20 @@ Dependencies:
 sudo pacman -S --needed python-hatchling python-build python-installer python-wheel
 ```
 
-Build and install:
+Build and install in one go (recommended):
 
 ```sh
-# Build
+makepkg -si
+```
+
+Or:
+
+```sh
+# Build first
 makepkg -s
 
-# Install
+#And then install
 sudo pacman -U smilemplayer-x.x-1-any.pkg.tar.zst
-
-# Or build & install on one go
-makepkg -si
 ```
 
 ### Build for Debian
@@ -222,13 +226,15 @@ sudo apt install \
     dh-sequence-python3
 ```
 
-Build and install:
+Build:
 
 ```sh
-# Build
 dpkg-buildpackage -b -us -uc
+```
 
-# Install
+Install:
+
+```sh
 sudo apt install ../smilemplayer_x.x-1_all.deb
 ```
 
@@ -242,9 +248,6 @@ Dependencies:
 - `python3-devel`
 - `python3-hatchling`
 - `python3-pip`
-- `python3-pyside6`
-- `python3-dbus-next`
-- `python3-mutagen`
 - `desktop-file-utils`
 
 Create required directories:
@@ -253,9 +256,12 @@ Create required directories:
 mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SRPMS}
 ```
 
-**For release build, use the release source archive:**
+**⚠︎ Now, you have two options for your build:**
 
-> [!WARNING]
+**Option 1:** Use the release source archive:
+
+This is for most users who want to just build the release version.
+
 > If you want to build an old or any previous version/commit, do `git checkout` to that commit tag first (e.g. `git checkout v1.6`).
 
 Download the release source archive:
@@ -264,30 +270,38 @@ Download the release source archive:
 spectool -g -R rpm/SPECS/smilemplayer.spec
 ```
 
-Build and install:
+Build:
 
 ```sh
-# Build
 rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
+```
 
-# Install
+Install:
+
+```sh
 sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```
 
-**For local testing (pre-release, latest commit), use the local source archive instead:**
+**Option 2:** Use the local or specific commit source archive:
+
+This is for local testing or building a specific version.
+
+> If you want to build an old or any previous version/commit, do `git checkout` to that commit first (e.g. `git checkout <commit_hash_or_tag>`).
 
 Create the source archive from current commit (replace `x.x` with the actual version):
 
 ```sh
-git archive --format=tar.gz --prefix=SmileMPlayer-1.5/ HEAD > rpm/SOURCES/v1.5.tar.gz
+git archive --format=tar.gz --prefix=SmileMPlayer-x.x/ HEAD > rpm/SOURCES/vx.x.tar.gz
 ```
 
-Build and install:
+Build:
 
 ```sh
-# Build
 rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
+```
 
-# Install
+Install:
+
+```sh
 sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```

@@ -19,9 +19,9 @@ BuildRequires:  appstream
 %pyproject_buildrequires -r
 
 %description
-SmileMPlayer is a lightweight local music player for Linux with playlist
-management, cover art, ReplayGain support, shuffle and loop playback, and
-MPRIS integration.
+SmileMPlayer is a simple and modern playlist-based local music player for Linux
+with ReplayGain support, MPRIS integration, fully customizable UI,
+Material You theme by default, and more.
 
 %prep
 %autosetup -n SmileMPlayer-%{version}
@@ -31,6 +31,9 @@ MPRIS integration.
 
 %install
 %pyproject_install
+
+rm -rf %{buildroot}%{python3_sitelib}/smilemplayer/__pycache__/
+rm -rf %{buildroot}%{python3_sitelib}/smilemplayer/core/__pycache__/
 
 desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
@@ -51,6 +54,7 @@ appstreamcli validate \
     %{buildroot}%{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
 
 %files
+%doc WIKI.md
 %license LICENSE
 
 %{_bindir}/smilemplayer
