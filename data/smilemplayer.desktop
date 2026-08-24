@@ -6,4 +6,3 @@ Icon=smilemplayer
 Terminal=false
 Type=Application
 Categories=AudioVideo;Player;
-MimeType=audio/mpeg;audio/flac;audio/ogg;audio/opus;audio/x-m4a;audio/aac;audio/wav;

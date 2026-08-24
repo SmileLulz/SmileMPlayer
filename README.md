@@ -236,6 +236,7 @@ sudo apt install ../smilemplayer_x.x-1_all.deb
 
 Dependencies:
 
+- `appstream`
 - `rpm-build`
 - `rpmdevtools`
 - `python3-devel`
