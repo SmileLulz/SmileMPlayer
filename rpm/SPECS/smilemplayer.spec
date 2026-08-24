@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        1.5
+Version:        1.6
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -66,5 +66,7 @@ appstreamcli validate \
 %{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Mon Aug 24 2026 SmileLulz - 1.5-1
-- Version bump to 1.5
+* Tue Aug 25 2026 SmileLulz - 1.6-1
+- Version bump to 1.6
+- Some proper packaging
+- Updated README.md

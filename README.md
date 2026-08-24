@@ -45,7 +45,7 @@ All dependencies used as APIs, no packages are bundled.
 
 > ⚠︎ Manual nerd font installation required.
 
-- `pyside6`
+- `PySide6`
 - `mutagen`
 - `dbus-next`
 
@@ -55,6 +55,7 @@ All dependencies used as APIs, no packages are bundled.
 - `pyside6`
 - `python-mutagen`
 - `python-dbus-next`
+- `qt6-multimedia-ffmpeg`
 - `ttf-jetbrains-mono-nerd`
 
 ### Debian

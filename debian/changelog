@@ -1,3 +1,11 @@
+smilemplayer (1.6-1) bookworm; urgency=medium
+
+  * Version bump to 1.6
+  * Some proper packaging
+  * Updated README.md
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Tue, 25 Aug 2026 04:49:46 +0530
+
 smilemplayer (1.5-1) bookworm; urgency=medium
 
   * Version bump to 1.5

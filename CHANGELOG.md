@@ -1,5 +1,10 @@
 # Changelogs
 
+### v1.6
+
+- Some proper packaging
+- Updated README.md
+
 ### v1.5
 
 - Some project updates

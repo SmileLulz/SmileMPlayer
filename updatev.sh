@@ -9,7 +9,7 @@ CONTROL="debian/control"
 SPEC="rpm/SPECS/smilemplayer.spec"
 
 CHANGELOG_MAINTAINER="SmileLulz <SmileLulz@users.noreply.github.com>"
-PKGBUILD_MAINTAINER="SmileLulz <smilelulzcontact at proton dot me>"
+PKGBUILD_MAINTAINER="SmileLulz <SmileLulz@users.noreply.github.com>"
 CONTROL_MAINTAINER="SmileLulz <SmileLulz@users.noreply.github.com>"
 SPEC_PACKAGER="SmileLulz"
 

@@ -1,7 +1,7 @@
-# Maintainer: SmileLulz <smilelulzcontact at proton dot me>
+# Maintainer: SmileLulz <SmileLulz@users.noreply.github.com>
 
 pkgname=smilemplayer
-pkgver=1.5
+pkgver=1.6
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
@@ -13,6 +13,8 @@ depends=(
     'pyside6>=6.8'
     'python-mutagen>=1.47'
     'python-dbus-next>=0.2.3'
+    'qt6-multimedia-ffmpeg'
+    'ttf-jetbrains-mono-nerd'
 )
 
 makedepends=(
