@@ -11,8 +11,7 @@ requires-python = ">=3.10"
 authors = [{ name = "SmileLulz" }]
 license = { text = "GPL-3.0-only" }
 dependencies = [
-  "PySide6-Essentials>=6.8",
-  "PySide6-Addons>=6.8",
+  "PySide6>=6.8",
   "mutagen>=1.47",
   "dbus-next>=0.2.3",
 ]

@@ -7,6 +7,11 @@ rm -rf src/
 rm -rf debian/.debhelper/
 rm -rf debian/smilemplayer/
 
+rm -rf rpm/BUILD/*
+rm -rf rpm/BUILDROOT/*
+rm -rf rpm/RPMS/*
+rm -rf rpm/SRPMS/*
+
 rm -f smilemplayer-*.pkg.tar.zst
 rm -f smilemplayer_*.deb
 rm -f smilemplayer_*.buildinfo

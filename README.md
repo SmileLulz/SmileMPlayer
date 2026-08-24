@@ -181,3 +181,43 @@ dpkg-buildpackage -b -us -uc
 # Install
 sudo apt install ../smilemplayer_x.x-1_all.deb
 ```
+
+### Build for Fedora
+
+Dependencies:
+
+- `rpm-build`
+- `rpmdevtools`
+- `python3-devel`
+- `python3-hatchling`
+- `python3-pip`
+- `python3-pyside6`
+- `python3-dbus-next`
+- `python3-mutagen`
+- `desktop-file-utils`
+
+> [!WARNING]
+> If you want to build an old or any previous version, do `git checkout` to that commit tag first (e.g. `git checkout v1.3`).
+
+Create required directories:
+
+```sh
+mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SRPMS}
+```
+
+Create the source archive (replace `x.x` with the actual version):
+
+```sh
+git archive \
+    --format=tar.gz \
+    --prefix=smilemplayer-x.x/ \
+    HEAD \
+    -o rpm/SOURCES/smilemplayer-x.x.tar.gz
+```
+
+Build and install:
+
+```sh
+# Build
+rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
+```
