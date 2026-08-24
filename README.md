@@ -279,7 +279,7 @@ sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 Create the source archive from current commit (replace `x.x` with the actual version):
 
 ```sh
-git archive --format=tar.gz --prefix=smilemplayer-x.x/ HEAD -o rpm/SOURCES/smilemplayer-x.x.tar.gz
+git archive --format=tar.gz --prefix=SmileMPlayer-1.5/ HEAD > rpm/SOURCES/v1.5.tar.gz
 ```
 
 Build and install:

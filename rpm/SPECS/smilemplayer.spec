@@ -32,9 +32,6 @@ MPRIS integration.
 %install
 %pyproject_install
 
-# Fedora uses system-installed fonts rather than bundling application fonts.
-rm -f %{buildroot}%{python3_sitelib}/smilemplayer/resources/fonts/*.ttf
-
 desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
     data/smilemplayer.desktop
@@ -50,6 +47,7 @@ desktop-file-validate \
     %{buildroot}%{_datadir}/applications/smilemplayer.desktop
 
 appstreamcli validate \
+    --no-net \
     %{buildroot}%{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
 
 %files
