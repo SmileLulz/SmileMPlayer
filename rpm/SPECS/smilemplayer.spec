@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        1.4
+Version:        1.5
 Release:        1%{?dist}
 Summary:        A simple and modern-looking playlist-based local music player
 
@@ -22,7 +22,7 @@ BuildRequires:  desktop-file-utils
 
 %description
 SmileMPlayer is a simple and modern-looking playlist-based local music
-player for Linux, built with PySide6 and Qt 6.
+player for Linux, built with PySide6 and Qt6.
 
 %prep
 %autosetup
@@ -60,5 +60,5 @@ desktop-file-validate \
 %{_datadir}/icons/hicolor/256x256/apps/smilemplayer.png
 
 %changelog
-* Mon Aug 24 2026 SmileLulz <SmileLulz@users.noreply.github.com> - 1.4-1
+* Mon Aug 24 2026 SmileLulz <SmileLulz@users.noreply.github.com> - 1.5-1
 - Initial Fedora package

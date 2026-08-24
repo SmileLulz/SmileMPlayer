@@ -37,8 +37,7 @@ All dependencies used as APIs, no packages are bundled.
 
 ### Python PIP
 
-- `pyside6-essentials`
-- `pyside6-addons`
+- `pyside6`
 - `mutagen`
 - `dbus-next`
 
@@ -61,12 +60,21 @@ All dependencies used as APIs, no packages are bundled.
 - `python3-mutagen`
 - `python3-dbus-next`
 
+### Fedora
+
+- `python3`
+- `python3-pyside6`
+- `python3-mutagen`
+- `python3-dbus-next`
+
 
 # 📥 Install
 
 You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself.
 
 Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
+
+> Replace any `x.x` with the actual version tag.
 
 ### Python PIP
 
@@ -102,8 +110,20 @@ sudo pacman -U /path/to/smilemplayer-x.x-1-any.pkg.tar.zst
 sudo apt install /path/to/smilemplayer_x.x-1_all.deb
 ```
 
+### Fedora
+
+1. Download the `.rpm` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
+
+2. Install:
+
+```sh
+sudo dnf install /path/to/smilemplayer-x.x-1.fcxx.noarch.rpm
+```
+
 
 # 📦 Build
+
+> Replace any `x.x` with the actual version tag.
 
 ### Clone the repository
 
@@ -208,11 +228,7 @@ mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SRPMS}
 Create the source archive (replace `x.x` with the actual version):
 
 ```sh
-git archive \
-    --format=tar.gz \
-    --prefix=smilemplayer-x.x/ \
-    HEAD \
-    -o rpm/SOURCES/smilemplayer-x.x.tar.gz
+git archive --format=tar.gz --prefix=smilemplayer-x.x/ HEAD -o rpm/SOURCES/smilemplayer-x.x.tar.gz
 ```
 
 Build and install:
@@ -220,4 +236,7 @@ Build and install:
 ```sh
 # Build
 rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
+
+# Install
+sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```

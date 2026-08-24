@@ -1,3 +1,5 @@
+#!/bin/bash
+
 rm -rf smilemplayer/__pycache__/
 rm -rf smilemplayer/core/__pycache__/
 rm -rf build/
@@ -10,6 +12,7 @@ rm -rf debian/smilemplayer/
 rm -rf rpm/BUILD/*
 rm -rf rpm/BUILDROOT/*
 rm -rf rpm/RPMS/*
+rm -rf rpm/SOURCES/*
 rm -rf rpm/SRPMS/*
 
 rm -f smilemplayer-*.pkg.tar.zst

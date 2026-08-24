@@ -1,5 +1,10 @@
 # Changelogs
 
+### v1.5
+
+- Some project updates
+- Updated README.md
+
 ### v1.4
 
 - Backend changes:
