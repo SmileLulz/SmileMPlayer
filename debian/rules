@@ -1,42 +1,23 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
-
-override_dh_auto_build:
-	python3 -m build --wheel --no-isolation
+	dh $@ --buildsystem=pybuild
 
 override_dh_auto_install:
-	rm -rf debian/smilemplayer
+	dh_auto_install
 
-	python3 -m installer \
-		--destdir=debian/smilemplayer \
-		--prefix=/usr \
-		--compile-bytecode=0 \
-		dist/*.whl
+	install -Dm644 data/smilemplayer.desktop \
+		debian/smilemplayer/usr/share/applications/smilemplayer.desktop
 
-	rm -rf debian/smilemplayer/usr/local
+	install -Dm644 data/icons/smilemplayer.png \
+		debian/smilemplayer/usr/share/icons/hicolor/256x256/apps/smilemplayer.png
 
-	mkdir -p debian/smilemplayer/usr/bin
+	install -Dm644 data/metainfo/com.smilelulz.SmileMPlayer.metainfo.xml \
+		debian/smilemplayer/usr/share/metainfo/com.smilelulz.SmileMPlayer.metainfo.xml
 
-	printf '#!/bin/sh\nexec python3 -m smilemplayer "$$@"\n' \
-		> debian/smilemplayer/usr/bin/smilemplayer
-
-	chmod +x debian/smilemplayer/usr/bin/smilemplayer
-
-	mkdir -p debian/smilemplayer/usr/share/applications
-	install -m644 data/smilemplayer.desktop debian/smilemplayer/usr/share/applications/
-
-	mkdir -p debian/smilemplayer/usr/share/icons/hicolor/256x256/apps
-	install -m644 data/icons/smilemplayer.png debian/smilemplayer/usr/share/icons/hicolor/256x256/apps/smilemplayer.png
-
-	mkdir -p debian/smilemplayer/usr/share/licenses/smilemplayer
-	install -m644 LICENSE debian/smilemplayer/usr/share/licenses/smilemplayer/LICENSE
-
-override_dh_builddeb:
-	dh_builddeb
+	install -Dm644 LICENSE \
+		debian/smilemplayer/usr/share/doc/smilemplayer/LICENSE
 
 override_dh_auto_clean:
-	dh_clean
+	dh_auto_clean
 	rm -rf dist build *.egg-info
-	rm -f ./smilemplayer_*.deb

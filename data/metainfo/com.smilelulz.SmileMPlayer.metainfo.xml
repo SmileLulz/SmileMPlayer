@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.smilelulz.SmileMPlayer</id>
+
+    <developer id="com.smilelulz">
+        <name>SmileLulz</name>
+    </developer>
+
+    <name>SmileMPlayer</name>
+    <summary>A simple, modern-looking and playlist-based local music player</summary>
+
+    <metadata_license>CC0-1.0</metadata_license>
+
+    <project_license>GPL-3.0-only</project_license>
+
+    <url type="homepage">https://github.com/SmileLulz/SmileMPlayer</url>
+    <url type="bugtracker">https://github.com/SmileLulz/SmileMPlayer/issues</url>
+    <url type="vcs-browser">https://github.com/SmileLulz/SmileMPlayer</url>
+
+    <launchable type="desktop-id">smilemplayer.desktop</launchable>
+
+    <provides>
+        <binary>smilemplayer</binary>
+    </provides>
+
+    <categories>
+        <category>AudioVideo</category>
+        <category>Audio</category>
+        <category>Player</category>
+    </categories>
+
+    <keywords>
+        <keyword>music</keyword>
+        <keyword>audio</keyword>
+        <keyword>player</keyword>
+        <keyword>playlist</keyword>
+        <keyword>MPRIS</keyword>
+    </keywords>
+
+    <description>
+        <p>
+            SmileMPlayer is a simple, modern-looking and playlist-based local music player for Linux, built with Qt6 and PySide6.
+        </p>
+    </description>
+
+    <supports>
+        <control>keyboard</control>
+    </supports>
+</component>

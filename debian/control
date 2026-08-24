@@ -4,11 +4,11 @@ Priority: optional
 Maintainer: SmileLulz <SmileLulz@users.noreply.github.com>
 Build-Depends:
     debhelper-compat (= 13),
-    python3,
-    python3-build,
-    python3-installer,
-    python3-wheel,
-    python3-hatchling
+    dh-sequence-python3,
+    pybuild-plugin-pyproject,
+    python3-all,
+    python3-hatchling,
+    desktop-file-utils
 Standards-Version: 4.6.2
 
 Package: smilemplayer
@@ -25,4 +25,7 @@ Depends:
     python3-dbus-next,
     ${misc:Depends},
     ${python3:Depends}
-Description: A simple and modern-looking playlist-based local music player.
+Description: Modern playlist-based local music player
+ SmileMPlayer is a simple and modern local music player for Linux with playlist
+ management, cover art, ReplayGain support, shuffle and loop playback, and
+ MPRIS integration.

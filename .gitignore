@@ -5,6 +5,7 @@ debian/smilemplayer/
 debian/debhelper-build-stamp
 debian/files
 debian/*.substvars
+debian/*.debhelper
 rpm/BUILD/
 rpm/BUILDROOT/
 rpm/RPMS/
@@ -14,6 +15,7 @@ rpm/SRPMS/
 # ---> Python
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.pybuild/
 *.py[codz]
 *$py.class
 

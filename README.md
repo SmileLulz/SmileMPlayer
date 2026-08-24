@@ -12,7 +12,7 @@
 <br></br>
 
 > [!WARNING]
-> This project was meant to be a personal project, but thought it would be nice to share with others.
+> This project was meant to be a personal project, but thought it would be nice to share it with others.
 > 
 > By the way, I am not accepting contributions. Thank you. Hope you like my app :)
 
@@ -35,7 +35,14 @@ All dependencies used as APIs, no packages are bundled.
 
 ⚠︎ Dependencies will auto-install during app installation, no need to install them manually.
 
+> [!WARNING]
+> You'll have to install a nerd font for icon support if you don't have any. The recommended option is JetBrainsMono Nerd Font.
+>
+> Only the Arch Linux package provides the `ttf-jetbrains-mono-nerd` font as a dependency, so you won't need to install manually.
+
 ### Python PIP
+
+> ⚠︎ Manual nerd font installation required.
 
 - `pyside6`
 - `mutagen`
@@ -47,8 +54,15 @@ All dependencies used as APIs, no packages are bundled.
 - `pyside6`
 - `python-mutagen`
 - `python-dbus-next`
+- `ttf-jetbrains-mono-nerd`
 
 ### Debian
+
+> ⚠︎ Manual nerd font installation required.
+
+```sh
+wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && cd ~/.local/share/fonts && unzip JetBrainsMono.zip && rm JetBrainsMono.zip && fc-cache -fv
+```
 
 - `python3`
 - `python3-pyside6.qtcore`
@@ -62,6 +76,12 @@ All dependencies used as APIs, no packages are bundled.
 
 ### Fedora
 
+> ⚠︎ Manual nerd font installation required.
+
+```sh
+wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && cd ~/.local/share/fonts && unzip JetBrainsMono.zip && rm JetBrainsMono.zip && fc-cache -fv
+```
+
 - `python3`
 - `python3-pyside6`
 - `python3-mutagen`
@@ -73,6 +93,8 @@ All dependencies used as APIs, no packages are bundled.
 You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself.
 
 Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
+
+> ⚠︎ You have to install a nerd font for icon support. The recommended option is JetBrainsMono Nerd Font.
 
 > Replace any `x.x` with the actual version tag.
 
@@ -182,14 +204,22 @@ Dependencies:
 
 - `build-essential`
 - `debhelper`
-- `python3`
-- `python3-build`
-- `python3-installer`
-- `python3-wheel`
+- `desktop-file-utils`
+- `python3-all`
 - `python3-hatchling`
+- `pybuild-plugin-pyproject`
+- `dh-sequence-python3`
 
 ```sh
-sudo apt install build-essential debhelper python3 python3-build python3-installer python3-wheel python3-hatchling
+sudo apt install \
+    build-essential \
+    debhelper \
+    desktop-file-utils \
+    python3 \
+    python3-all \
+    python3-hatchling \
+    pybuild-plugin-pyproject \
+    dh-sequence-python3
 ```
 
 Build and install:
@@ -216,16 +246,36 @@ Dependencies:
 - `python3-mutagen`
 - `desktop-file-utils`
 
-> [!WARNING]
-> If you want to build an old or any previous version, do `git checkout` to that commit tag first (e.g. `git checkout v1.3`).
-
 Create required directories:
 
 ```sh
 mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SRPMS}
 ```
 
-Create the source archive (replace `x.x` with the actual version):
+**For release build, use the release source archive:**
+
+> [!WARNING]
+> If you want to build an old or any previous version/commit, do `git checkout` to that commit tag first (e.g. `git checkout v1.6`).
+
+Download the release source archive:
+
+```sh
+spectool -g -R rpm/SPECS/smilemplayer.spec
+```
+
+Build and install:
+
+```sh
+# Build
+rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
+
+# Install
+sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
+```
+
+**For local testing (pre-release, latest commit), use the local source archive instead:**
+
+Create the source archive from current commit (replace `x.x` with the actual version):
 
 ```sh
 git archive --format=tar.gz --prefix=smilemplayer-x.x/ HEAD -o rpm/SOURCES/smilemplayer-x.x.tar.gz
