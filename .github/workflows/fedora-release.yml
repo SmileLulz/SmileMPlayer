@@ -27,16 +27,18 @@ jobs:
       - name: Install build dependencies
         run: |
           dnf -y install \
-            git \
             rpm-build \
             rpmdevtools \
-            rpmdev-setuptree \
             python3-devel \
             python3-hatchling \
             python3-pip \
+            python3-dbus-next \
+            python3-mutagen \
+            python3-pyside6 \
             desktop-file-utils \
             appstream \
-            rpmlint
+            rpmlint \
+            spectool
 
       - name: Create build tree
         run: |
