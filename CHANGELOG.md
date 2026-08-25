@@ -1,5 +1,9 @@
 # Changelogs
 
+### v1.7
+
+- Testing git workflow
+
 ### v1.6
 
 - Some proper packaging

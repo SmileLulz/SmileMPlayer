@@ -1,3 +1,10 @@
+smilemplayer (1.7-1) bookworm; urgency=medium
+
+  * Version bump to 1.7
+  * Testing git workflow
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Tue, 25 Aug 2026 05:50:37 +0530
+
 smilemplayer (1.6-1) bookworm; urgency=medium
 
   * Version bump to 1.6

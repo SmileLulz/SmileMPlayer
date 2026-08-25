@@ -1,0 +1,65 @@
+name: Build Arch Linux package
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Update Arch Linux
+        run: |
+          pacman -Syu --noconfirm
+
+      - name: Install build tools
+        run: |
+          pacman -S --noconfirm base-devel git namcap
+      
+      - name: Run namcap
+        run: |
+          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
+          namcap PKGBUILD
+          namcap "$pkg"
+
+      - name: Build package
+        run: |
+          makepkg --syncdeps --noconfirm --cleanbuild --clean
+
+      - name: Verify package
+        run: |
+          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
+
+          if [ -z "$pkg" ]; then
+            echo "ERROR: No Arch package was produced."
+            exit 1
+          fi
+
+          echo "Built: $pkg"
+
+          pacman -Qip "$pkg"
+          pacman -Qlp "$pkg"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smilemplayer-arch-package
+          path: '*.pkg.tar.zst'
+
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
+
+          gh release upload "${GITHUB_REF_NAME}" "$pkg" --clobber

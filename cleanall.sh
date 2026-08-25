@@ -18,8 +18,9 @@ rm -rf rpm/SOURCES/*
 rm -rf rpm/SRPMS/*
 
 rm -f smilemplayer-*.pkg.tar.zst
-# rm -f smilemplayer-*.rpm
 # rm -f *.spec
+rm -f smilemplayer-*.rpm
+rm -f smilemplayer_*.deb
 rm -f ../smilemplayer_*.deb
 rm -f ../smilemplayer_*.buildinfo
 rm -f ../smilemplayer_*.changes
