@@ -94,7 +94,7 @@ update_files() {
     fi
 
     # Debian changelog
-    local new_entry="${pkgname} (${full_version}) unstable; urgency=medium
+    local new_entry="${pkgname} (${full_version}) bookworm; urgency=medium
 
   * Version bump to ${new_version}
 

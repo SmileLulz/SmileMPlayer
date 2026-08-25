@@ -1,5 +1,11 @@
 # Changelogs
 
+### v1.8
+
+- Added git workflows for build-and-release automation
+- Changed metainfo / appstream id from `com.smilelulz.SmileMPlayer` to `io.github.SmileLulz.SmileMPlayer`
+- Some project and README.md updates
+
 ### v1.7
 
 - Testing git workflow

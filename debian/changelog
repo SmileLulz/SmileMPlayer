@@ -1,3 +1,12 @@
+smilemplayer (1.8-1) unstable; urgency=medium
+
+  * Version bump to 1.8
+  * Added git workflows for build-and-release automation
+  * Changed metainfo / appstream id from `com.smilelulz.SmileMPlayer` to `io.github.SmileLulz.SmileMPlayer`
+  * Some project and README.md updates
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Tue, 25 Aug 2026 21:24:47 +0530
+
 smilemplayer (1.8.b23-1) unstable; urgency=medium
 
   * Version bump to 1.8.b23

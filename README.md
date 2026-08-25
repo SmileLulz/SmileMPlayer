@@ -268,7 +268,7 @@ This is for most users who want to just build the release version.
 Download the release source archive:
 
 ```sh
-spectool -g -R rpm/SPECS/smilemplayer.spec
+spectool --define "_topdir $PWD/rpm" rpm/SPECS/smilemplayer.spec
 ```
 
 Build:

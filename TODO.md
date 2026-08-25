@@ -1,6 +1,5 @@
 # TODO
 
-- Fix Fedora's source pulling
 - Try publishing to APT
 - Add documentation of APIs for frontend in WIKI.md
 - Add automatic proper changelog submitting in `updatev.sh` script
