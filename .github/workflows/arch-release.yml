@@ -88,7 +88,7 @@ jobs:
         run: |
           title="${GITHUB_REF_NAME}"
 
-          notes="$(git log -1 --format='%b' "${GITHUB_SHA}")"
+          notes="$(git -C "$GITHUB_WORKSPACE" log -1 --format='%b' "${GITHUB_SHA}")"
 
           if gh release view "$title" \
               --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
