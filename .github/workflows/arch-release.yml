@@ -89,4 +89,5 @@ jobs:
           gh release upload \
             "${GITHUB_REF_NAME}" \
             "${{ steps.package.outputs.pkg }}" \
+            --repo "${GITHUB_REPOSITORY}" \
             --clobber
