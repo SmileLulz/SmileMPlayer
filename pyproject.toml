@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "smilemplayer"
-version = "1.8.b9"
+version = "1.8.b10"
 description = "A simple and modern-looking playlist-based local music player for Linux"
 readme = "README.md"
 requires-python = ">=3.10"

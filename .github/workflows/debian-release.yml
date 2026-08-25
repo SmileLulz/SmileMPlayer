@@ -45,7 +45,7 @@ jobs:
       - name: Create build user
         run: |
           useradd --create-home builder
-          chown -R builder:builder "$GITHUB_WORKSPACE"
+          chown -R builder:builder "$(dirname "$GITHUB_WORKSPACE")"
 
       - name: Build package
         run: |
@@ -55,7 +55,7 @@ jobs:
       - name: Find package
         id: package
         run: |
-          pkg="$(find "$GITHUB_WORKSPACE/.." \
+          pkg="$(find "$(dirname "$GITHUB_WORKSPACE")" \
             -maxdepth 1 \
             -type f \
             -name 'smilemplayer_*.deb' \
