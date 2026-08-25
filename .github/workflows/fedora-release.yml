@@ -47,27 +47,17 @@ jobs:
           useradd --create-home builder
           chown -R builder:builder "$GITHUB_WORKSPACE"
 
-      - name: Prepare source archive
+      - name: Download release source
         run: |
-          tag="${GITHUB_REF_NAME}"
-          version="${tag#v}"
-
-          git archive \
-            --format=tar.gz \
-            --prefix="SmileMPlayer-${version}/" \
-            HEAD \
-            > "rpm/SOURCES/smilemplayer-${version}.tar.gz"
-
-          chown builder:builder \
-            "rpm/SOURCES/smilemplayer-${version}.tar.gz"
+          spectool -g -R rpm/SPECS/smilemplayer.spec
 
       - name: Build RPM
         run: |
           su - builder -c \
             "cd '$GITHUB_WORKSPACE' && \
-             rpmbuild \
-               --define '_topdir $GITHUB_WORKSPACE/rpm' \
-               -ba rpm/SPECS/smilemplayer.spec"
+            rpmbuild \
+              --define '_topdir $GITHUB_WORKSPACE/rpm' \
+              -ba rpm/SPECS/smilemplayer.spec"
 
       - name: Find package
         id: package
