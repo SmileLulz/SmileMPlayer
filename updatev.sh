@@ -23,7 +23,7 @@ usage() {
 Usage:
   $0 1|--major           Bump major version (1.2 -> 2.0)
   $0 2|--minor           Bump minor version (1.2 -> 1.3)
-  $0 -s|--set X.Y        Set explicit version (two parts)
+  $0 -s|--set X.Y[...]   Set explicit version (e.g. 1.6, 1.6.b1, 2.0.rc1)
 EOF
     exit 1
 }
@@ -40,11 +40,21 @@ bump_version() {
     local current="$1"
     local type="$2"
 
+    if [[ ! "$current" =~ ^[0-9]+\.[0-9]+$ ]]; then
+        echo -e "${RED}Error: ${type} bump requires a clean X.Y version. Current version is '${current}'.${NC}" >&2
+        echo -e "${YELLOW}Use --set to explicitly set a version with a suffix.${NC}" >&2
+        exit 1
+    fi
+
+    local major
+    local minor
+
     IFS='.' read -r major minor <<< "$current"
 
     case "$type" in
         major) echo "$((major + 1)).0" ;;
         minor) echo "${major}.$((minor + 1))" ;;
+        *)     echo "Error: Unknown bump type '$type'" >&2; exit 1 ;;
     esac
 }
 
@@ -171,6 +181,7 @@ case "$1" in
 
         echo -e "${YELLOW}Bumping ${bump_type} version: ${current_version} -> ${new_version}${NC}"
         ;;
+
     -s|--set)
         if [[ -z "$2" ]]; then
             echo -e "${RED}Error: Version required with --set${NC}"
@@ -178,16 +189,27 @@ case "$1" in
         fi
 
         new_version="$2"
+
+        # X.Y with optional arbitrary non-whitespace suffix beginning
+        # immediately after the second numeric component.
+        if ! [[ "$new_version" =~ ^[0-9]+\.[0-9]+(\.[^[:space:]]+)?$ ]]; then
+            echo -e "${RED}Error: Invalid version format. Use X.Y or X.Y.<suffix>${NC}"
+            echo -e "${YELLOW}Examples: 1.6, 1.6.b1, 1.6.alpha, 2.0.rc1${NC}"
+            exit 1
+        fi
+
         echo -e "${YELLOW}Setting version to: ${new_version}${NC}"
         ;;
+
     *)
         echo -e "${RED}Error: Unknown option '$1'${NC}"
         usage
         ;;
 esac
 
-if ! [[ "$new_version" =~ ^[0-9]+\.[0-9]+$ ]]; then
-    echo -e "${RED}Error: Invalid version format. Use X.Y (two parts)${NC}"
+# Validate versions produced by major/minor as well.
+if ! [[ "$new_version" =~ ^[0-9]+\.[0-9]+$|^[0-9]+\.[0-9]+\.[^[:space:]]+$ ]]; then
+    echo -e "${RED}Error: Invalid version format: ${new_version}${NC}"
     exit 1
 fi
 

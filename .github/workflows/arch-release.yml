@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -11,6 +12,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     container:
       image: archlinux:latest
 
@@ -25,30 +27,42 @@ jobs:
       - name: Install build tools
         run: |
           pacman -S --noconfirm base-devel git namcap
-      
-      - name: Run namcap
+
+      - name: Create build user
         run: |
-          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
-          namcap PKGBUILD
-          namcap "$pkg"
+          useradd --create-home builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
 
       - name: Build package
         run: |
-          makepkg --syncdeps --noconfirm --cleanbuild --clean
+          su - builder -c \
+            "cd '$GITHUB_WORKSPACE' && makepkg --syncdeps --noconfirm --cleanbuild --clean"
 
-      - name: Verify package
+      - name: Find package
+        id: package
         run: |
-          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
+          pkg="$(find "$GITHUB_WORKSPACE" \
+            -maxdepth 1 \
+            -type f \
+            -name '*.pkg.tar.zst' \
+            -print -quit)"
 
           if [ -z "$pkg" ]; then
             echo "ERROR: No Arch package was produced."
             exit 1
           fi
 
-          echo "Built: $pkg"
+          echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
+          echo "Built package: $pkg"
 
-          pacman -Qip "$pkg"
-          pacman -Qlp "$pkg"
+      - name: Run namcap
+        run: |
+          namcap "${{ steps.package.outputs.pkg }}"
+
+      - name: Verify package
+        run: |
+          pacman -Qip "${{ steps.package.outputs.pkg }}"
+          pacman -Qlp "${{ steps.package.outputs.pkg }}"
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
@@ -60,6 +74,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          pkg="$(find . -maxdepth 1 -type f -name '*.pkg.tar.zst' -print -quit)"
-
-          gh release upload "${GITHUB_REF_NAME}" "$pkg" --clobber
+          gh release upload "${GITHUB_REF_NAME}" "${{ steps.package.outputs.pkg }}" --clobber
