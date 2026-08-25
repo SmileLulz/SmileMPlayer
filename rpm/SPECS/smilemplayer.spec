@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        1.8
+Version:        1.9
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -66,8 +66,9 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Tue Aug 25 2026 SmileLulz - 1.8-1
-- Version bump to 1.8
+* Tue Aug 25 2026 SmileLulz - 1.9-1
+- Version bump to 1.9
 - Added git workflows for build-and-release automation
 - Changed metainfo / appstream id from `com.smilelulz.SmileMPlayer` to `io.github.SmileLulz.SmileMPlayer`
+- Fixed appstream developer id
 - Some project and README.md updates

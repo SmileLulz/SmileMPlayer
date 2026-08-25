@@ -1,5 +1,9 @@
 # Changelogs
 
+### v1.9
+
+- Fixed appstream developer id
+
 ### v1.8
 
 - Added git workflows for build-and-release automation
