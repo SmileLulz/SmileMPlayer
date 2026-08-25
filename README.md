@@ -92,13 +92,32 @@ mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://gith
 
 # 📥 Install
 
-You can either choose to install the prebuilt binary from the [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) or [Build & install](#-build) by yourself.
-
-Below guide is for installing prebuilt binary. If you chose to build, then go to [📦 Build](#-build) section.
-
 > ⚠︎ You have to install a nerd font for icon support. The recommended option is JetBrainsMono Nerd Font.
 
 > Replace any `x.x` with the actual version tag.
+
+### For any distro
+
+This will install the latest release on any distribution (Arch, Debain, Fedora based distros; but sadly not for Void Linux yet).
+
+Install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/main/install.sh | bash
+```
+
+But if you want to inspect the installation script first:
+
+```bash
+# Download the script
+curl -fsSL https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/main/install.sh -o install.sh
+
+# Inspect
+less install.sh
+
+# Then you can install with the downloaded script
+bash install.sh
+```
 
 ### Python PIP
 
@@ -114,38 +133,8 @@ pip install /path/to/smilemplayer-x.x-py3-none-any.whl
 pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
 ```
 
-### Arch Linux
 
-1. Download the `.tar.zst` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
-
-2. Install:
-
-```sh
-sudo pacman -U /path/to/smilemplayer-x.x-1-any.pkg.tar.zst
-```
-
-### Debian
-
-1. Download the `.deb` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
-
-2. Install:
-
-```sh
-sudo apt install /path/to/smilemplayer_x.x-1_all.deb
-```
-
-### Fedora
-
-1. Download the `.rpm` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
-
-2. Install:
-
-```sh
-sudo dnf install /path/to/smilemplayer-x.x-1.fcxx.noarch.rpm
-```
-
-
-# 📦 Build
+# 📦 Build by yourself
 
 > Replace any `x.x` with the actual version tag.
 
