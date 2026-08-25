@@ -1,0 +1,122 @@
+name: Build Arch Linux package
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Update Arch Linux
+        run: |
+          pacman -Syu --noconfirm
+
+      - name: Install build dependencies
+        run: |
+          pacman -S --noconfirm \
+            base-devel \
+            git \
+            github-cli \
+            namcap \
+            python \
+            pyside6 \
+            qt6-multimedia-ffmpeg \
+            python-mutagen \
+            python-dbus-next \
+            ttf-jetbrains-mono-nerd \
+            python-hatchling \
+            python-build \
+            python-installer
+
+      - name: Create build user
+        run: |
+          useradd --create-home builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+
+      - name: Build package
+        run: |
+          su - builder -c \
+            "cd '$GITHUB_WORKSPACE' && makepkg --nodeps --noconfirm --cleanbuild --clean"
+
+      - name: Find package
+        id: package
+        run: |
+          pkg="$(find "$GITHUB_WORKSPACE" \
+            -maxdepth 1 \
+            -type f \
+            -name '*.pkg.tar.zst' \
+            -print -quit)"
+
+          if [ -z "$pkg" ]; then
+            echo "ERROR: No Arch package was produced."
+            exit 1
+          fi
+
+          echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
+
+      - name: Run namcap
+        run: |
+          namcap "${{ steps.package.outputs.pkg }}"
+
+      - name: Verify package
+        run: |
+          pacman -Qip "${{ steps.package.outputs.pkg }}"
+          pacman -Qlp "${{ steps.package.outputs.pkg }}"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smilemplayer-arch-package
+          path: '*.pkg.tar.zst'
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="${GITHUB_REF_NAME}"
+
+          commit_message="$(
+            gh api \
+              "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}" \
+              --jq '.commit.message'
+          )"
+
+          notes="$(printf '%s\n' "$commit_message" | sed '1d')"
+
+          if gh release view "$title" \
+              --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+
+            echo "Release $title already exists."
+
+            gh release edit "$title" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "$title" \
+              --notes "$notes"
+
+          else
+
+            gh release create "$title" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "$title" \
+              --notes "$notes" \
+              --verify-tag
+          fi
+
+          gh release upload \
+            "$title" \
+            "${{ steps.package.outputs.pkg }}" \
+            --repo "${GITHUB_REPOSITORY}" \
+            --clobber
