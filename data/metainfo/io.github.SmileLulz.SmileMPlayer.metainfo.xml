@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>com.smilelulz.SmileMPlayer</id>
+    <id>io.github.SmileLulz.SmileMPlayer</id>
 
-    <developer id="com.smilelulz">
+    <developer id="io.github.SmileLulz">
         <name>SmileLulz</name>
     </developer>
 

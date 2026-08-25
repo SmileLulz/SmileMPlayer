@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        1.8.b22
+Version:        1.8.b23
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -42,8 +42,8 @@ desktop-file-install \
 install -Dm644 data/icons/smilemplayer.png \
     %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/smilemplayer.png
 
-install -Dm644 data/metainfo/com.smilelulz.SmileMPlayer.metainfo.xml \
-    %{buildroot}%{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
+install -Dm644 data/metainfo/io.github.SmileLulz.SmileMPlayer.metainfo.xml \
+    %{buildroot}%{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %check
 desktop-file-validate \
@@ -51,7 +51,7 @@ desktop-file-validate \
 
 appstreamcli validate \
     --no-net \
-    %{buildroot}%{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
+    %{buildroot}%{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %files
 %doc WIKI.md
@@ -63,9 +63,9 @@ appstreamcli validate \
 
 %{_datadir}/applications/smilemplayer.desktop
 %{_datadir}/icons/hicolor/256x256/apps/smilemplayer.png
-%{_metainfodir}/com.smilelulz.SmileMPlayer.metainfo.xml
+%{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Tue Aug 25 2026 SmileLulz - 1.8.b22-1
-- Version bump to 1.8.b22
+* Tue Aug 25 2026 SmileLulz - 1.8.b23-1
+- Version bump to 1.8.b23
 

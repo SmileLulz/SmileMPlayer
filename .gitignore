@@ -14,6 +14,8 @@ rpm/SRPMS/
 review-smilemplayer/
 /*.spec
 /*.rpm
+flatpak-requirements.txt
+DEV-README.md
 
 # ---> Python
 # Byte-compiled / optimized / DLL files

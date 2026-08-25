@@ -12,8 +12,8 @@ override_dh_auto_install:
 	install -Dm644 data/icons/smilemplayer.png \
 		debian/smilemplayer/usr/share/icons/hicolor/256x256/apps/smilemplayer.png
 
-	install -Dm644 data/metainfo/com.smilelulz.SmileMPlayer.metainfo.xml \
-		debian/smilemplayer/usr/share/metainfo/com.smilelulz.SmileMPlayer.metainfo.xml
+	install -Dm644 data/metainfo/io.github.SmileLulz.SmileMPlayer.metainfo.xml \
+		debian/smilemplayer/usr/share/metainfo/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 	install -Dm644 LICENSE \
 		debian/smilemplayer/usr/share/doc/smilemplayer/LICENSE
