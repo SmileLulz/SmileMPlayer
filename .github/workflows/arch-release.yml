@@ -24,9 +24,18 @@ jobs:
         run: |
           pacman -Syu --noconfirm
 
-      - name: Install build tools
+      - name: Install package dependencies
         run: |
-          pacman -S --noconfirm base-devel git namcap
+          pacman -S --noconfirm \
+            python \
+            pyside6 \
+            qt6-multimedia-ffmpeg \
+            python-mutagen \
+            python-dbus-next \
+            ttf-jetbrains-mono-nerd \
+            python-hatchling \
+            python-build \
+            python-installer
 
       - name: Create build user
         run: |
@@ -36,7 +45,7 @@ jobs:
       - name: Build package
         run: |
           su - builder -c \
-            "cd '$GITHUB_WORKSPACE' && makepkg --syncdeps --noconfirm --cleanbuild --clean"
+            "cd '$GITHUB_WORKSPACE' && makepkg --nodeps --noconfirm --cleanbuild --clean"
 
       - name: Find package
         id: package
