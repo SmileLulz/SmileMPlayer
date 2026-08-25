@@ -1,0 +1,203 @@
+name: Build Fedora RPM
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: fedora:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Update Fedora
+        run: |
+          dnf -y upgrade
+
+      - name: Install build dependencies
+        run: |
+          dnf -y install \
+            rpm-build \
+            rpmdevtools \
+            rpmdev-setuptree \
+            python3-devel \
+            python3-hatchling \
+            python3-pip \
+            desktop-file-utils \
+            appstream \
+            rpmlint
+
+      - name: Create build tree
+        run: |
+          mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+
+      - name: Create build user
+        run: |
+          useradd --create-home builder
+          chown -R builder:builder "$GITHUB_WORKSPACE"
+
+      - name: Prepare source archive
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          version="${tag#v}"
+
+          git archive \
+            --format=tar.gz \
+            --prefix="SmileMPlayer-${version}/" \
+            HEAD \
+            > "rpm/SOURCES/smilemplayer-${version}.tar.gz"
+
+          chown builder:builder \
+            "rpm/SOURCES/smilemplayer-${version}.tar.gz"
+
+      - name: Build RPM
+        run: |
+          su - builder -c \
+            "cd '$GITHUB_WORKSPACE' && \
+             rpmbuild \
+               --define '_topdir $GITHUB_WORKSPACE/rpm' \
+               -ba rpm/SPECS/smilemplayer.spec"
+
+      - name: Find package
+        id: package
+        run: |
+          pkg="$(find "$GITHUB_WORKSPACE/rpm/RPMS" \
+            -type f \
+            -name '*.rpm' \
+            -not -name '*-debuginfo-*.rpm' \
+            -print -quit)"
+
+          if [ -z "$pkg" ]; then
+            echo "ERROR: No RPM was produced."
+            exit 1
+          fi
+
+          echo "pkg=$pkg" >> "$GITHUB_OUTPUT"
+          echo "Built package: $pkg"
+
+      - name: Run rpmlint
+        run: |
+          rpmlint "${{ steps.package.outputs.pkg }}"
+
+      - name: Verify package
+        run: |
+          rpm -qip "${{ steps.package.outputs.pkg }}"
+          rpm -qpl "${{ steps.package.outputs.pkg }}"
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/artifacts"
+          cp "${{ steps.package.outputs.pkg }}" \
+             "$GITHUB_WORKSPACE/artifacts/"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: smilemplayer-fedora-rpm
+          path: artifacts/*.rpm
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="${GITHUB_REF_NAME}"
+
+          commit_message="$(
+            curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}" |
+            python3 -c 'import json,sys; print(json.load(sys.stdin)["commit"]["message"])'
+          )"
+
+          notes="$(printf '%s\n' "$commit_message" | sed '1d')"
+
+          release_json="$(
+            curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/tags/${title}" \
+            || true
+          )"
+
+          if printf '%s' "$release_json" |
+              python3 -c \
+                'import json,sys; d=json.load(sys.stdin); sys.exit(0 if "id" in d else 1)' \
+              2>/dev/null; then
+
+            echo "Release ${title} already exists."
+
+            release_id="$(
+              printf '%s' "$release_json" |
+              python3 -c 'import json,sys; print(json.load(sys.stdin)["id"])'
+            )"
+
+            upload_url="$(
+              printf '%s' "$release_json" |
+              python3 -c 'import json,sys; print(json.load(sys.stdin)["upload_url"])'
+            )"
+
+            curl -fsSL -X PATCH \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/${release_id}" \
+              -d "$(
+                python3 -c \
+                  'import json,sys; print(json.dumps({"name":sys.argv[1],"body":sys.argv[2]}))' \
+                  "$title" "$notes"
+              )" \
+              >/dev/null
+
+          else
+
+            echo "Creating release ${title}."
+
+            release_json="$(
+              curl -fsSL -X POST \
+                -H "Authorization: Bearer ${GH_TOKEN}" \
+                -H "Accept: application/vnd.github+json" \
+                -H "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/${GITHUB_REPOSITORY}/releases" \
+                -d "$(
+                  python3 -c \
+                    'import json,sys; print(json.dumps({"tag_name":sys.argv[1],"name":sys.argv[1],"body":sys.argv[2],"draft":False,"prerelease":False}))' \
+                    "$title" "$notes"
+                )"
+            )"
+
+            upload_url="$(
+              printf '%s' "$release_json" |
+              python3 -c 'import json,sys; print(json.load(sys.stdin)["upload_url"])'
+            )"
+          fi
+
+          upload_url="${upload_url%\{*}"
+
+          pkg="${{ steps.package.outputs.pkg }}"
+          asset_name="$(basename "$pkg")"
+
+          curl -fsSL -X POST \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@${pkg}" \
+            "${upload_url}?name=$(python3 -c \
+              'import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))' \
+              "$asset_name")" \
+            >/dev/null
+
+          echo "Uploaded ${asset_name} to ${title}."
