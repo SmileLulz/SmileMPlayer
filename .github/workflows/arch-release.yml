@@ -82,12 +82,34 @@ jobs:
           name: smilemplayer-arch-package
           path: '*.pkg.tar.zst'
 
-      - name: Upload to GitHub Release
+      - name: Create or update GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          title="${GITHUB_REF_NAME}"
+
+          notes="$(git log -1 --format='%b' "${GITHUB_SHA}")"
+
+          if gh release view "$title" \
+              --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+
+            echo "Release $title already exists."
+
+            gh release edit "$title" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "$title" \
+              --notes "$notes"
+
+          else
+
+            gh release create "$title" \
+              --repo "${GITHUB_REPOSITORY}" \
+              --title "$title" \
+              --notes "$notes"
+          fi
+
           gh release upload \
-            "${GITHUB_REF_NAME}" \
+            "$title" \
             "${{ steps.package.outputs.pkg }}" \
             --repo "${GITHUB_REPOSITORY}" \
             --clobber

@@ -1,7 +1,7 @@
 # Maintainer: SmileLulz <SmileLulz@users.noreply.github.com>
 
 pkgname=smilemplayer
-pkgver=1.8.b5
+pkgver=1.8.b6
 pkgrel=1
 pkgdesc="A simple and modern-looking playlist-based local music player for Linux"
 arch=('any')
