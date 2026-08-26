@@ -1,3 +1,11 @@
+smilemplayer (2.0-1) bookworm; urgency=medium
+
+  * Version bump to 2.0
+  * Fixed `debian/copyright`'s year mistake
+  * Some `pyproject.toml` changes
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Wed, 26 Aug 2026 19:04:25 +0530
+
 smilemplayer (1.9-1) bookworm; urgency=medium
 
   * Version bump to 1.9

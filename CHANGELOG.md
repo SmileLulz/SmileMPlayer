@@ -1,5 +1,10 @@
 # Changelogs
 
+### v2.0
+
+- Fixed `debian/copyright`'s year mistake
+- Some `pyproject.toml` changes
+
 ### v1.9
 
 - Fixed appstream developer id
