@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.2.b1
+
+- Fixing fedora build workflow
+
 ### v2.1
 
 - Added LRC sidecar lyrics support
