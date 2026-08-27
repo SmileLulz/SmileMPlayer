@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import os
 import shutil
 import sys
@@ -11,7 +12,6 @@ from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
 from .core.library import LibraryManager
-from .core.mpris import MprisServer
 from .core.player_backend import PlayerBackend
 from .core.settings import AppSettings
 
@@ -64,9 +64,6 @@ def main() -> int:
         generate_theme(source_root, target_root)
         return 0
 
-    # if sys.platform.startswith("linux"):
-    #     os.environ.setdefault("QT_MEDIA_BACKEND", "gstreamer")
-
     app = QGuiApplication(sys.argv)
     desktop_file_installed = any(
         (Path(base) / "applications" / "smilemplayer.desktop").is_file()
@@ -78,18 +75,18 @@ def main() -> int:
     settings = AppSettings(str(config_dir))
     library = LibraryManager(settings)
     backend = PlayerBackend(library, settings)
-    mpris_server = None
 
-    if settings.data.get("mpris_enabled", True):
-        mpris_server = MprisServer(backend)
-        mpris_server.start()
+    mpris_server = None
+    if sys.platform.startswith("linux") and settings.data.get("mpris_enabled", True):
+        try:
+            mpris_module = importlib.import_module(".core.mpris", package="smilemplayer")
+            MprisServer = mpris_module.MprisServer
+            mpris_server = MprisServer(backend)
+            mpris_server.start()
+        except Exception as e:
+            print(f"Warning: MPRIS support failed to start: {e}", file=sys.stderr)
 
     app.aboutToQuit.connect(lambda: mpris_server.stop() if mpris_server is not None else None)
-
-    # if not mpris_server.start():
-    #     print("Warning: MPRIS support could not be started.", file=sys.stderr)
-
-    # app.aboutToQuit.connect(mpris_server.stop)
 
     engine = QQmlApplicationEngine()
     engine.rootContext().setContextProperty("player", backend)

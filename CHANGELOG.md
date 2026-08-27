@@ -1,5 +1,12 @@
 # Changelogs
 
+### v2.5
+
+- Conditional `dbus-next` library importing
+- Added bundled font only for Windows build (gonna test Windows build)
+- Updated DEPENDENCIES.md
+- Updated README.md
+
 ### v2.4
 
 - Theme color update
