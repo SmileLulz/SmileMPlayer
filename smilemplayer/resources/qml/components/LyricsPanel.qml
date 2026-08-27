@@ -127,19 +127,24 @@ Rectangle {
                                         id: wordText
                                         anchors.fill: parent
                                         text: modelData.text
-                                        color:
-                                            lyricDelegate.current &&
+
+                                        readonly property bool activeLine:
+                                            lyricDelegate.current
+                                        readonly property bool elapsedWord:
+                                            activeLine &&
+                                            Api.player.currentLyricWordIndex >= 0 &&
+                                            index <= Api.player.currentLyricWordIndex
+                                        readonly property bool activeWord:
+                                            activeLine &&
                                             index === Api.player.currentLyricWordIndex
-                                                ? Theme.color.accent
-                                                : lyricDelegate.current
-                                                    ? Theme.color.text
-                                                    : Theme.color.textSecondary
-                                        font.pixelSize: lyricDelegate.current
+
+                                        color: elapsedWord
+                                            ? Theme.color.accent
+                                            : Theme.color.textSecondary
+                                        font.pixelSize: activeLine
                                             ? Theme.font.sizeM
                                             : Theme.font.sizeMS
-                                        font.bold:
-                                            lyricDelegate.current &&
-                                            index === Api.player.currentLyricWordIndex
+                                        font.bold: activeWord
                                     }
 
                                     MouseArea {

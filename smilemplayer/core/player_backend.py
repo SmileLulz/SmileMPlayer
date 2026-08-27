@@ -35,7 +35,9 @@ class PlayerBackend(QObject):
     replayGainChanged = Signal()
     lyricsChanged = Signal()
     currentLyricChanged = Signal()
+    currentLyricWordChanged = Signal()
     lyricsSyncModeChanged = Signal()
+    lyricsEnabledChanged = Signal()
 
     LOOP_MODES = ("none", "track", "playlist")
     REPLAYGAIN_MODES = ("track", "album")
@@ -77,6 +79,7 @@ class PlayerBackend(QObject):
         self._sort_desc = bool(settings.data.get("sort_desc", False))
 
         self._lyrics_parser = LrcParser()
+        self._lyrics_enabled = bool(settings.data.get("lyrics_enabled", True))
         self._lyrics_sync = LyricsSynchronizer()
         self._lyrics_document = LyricsDocument(lines=tuple())
         lyrics_sync_mode = str(settings.data.get("lyrics_sync_mode", "line"))
@@ -231,6 +234,14 @@ class PlayerBackend(QObject):
     def sortKey(self) -> str:
         return self._sort_key
 
+    @Property(bool, notify=lyricsEnabledChanged)
+    def lyricsEnabled(self) -> bool:
+        return self._lyrics_enabled
+
+    @lyricsEnabled.setter
+    def lyricsEnabled(self, value: bool) -> None:
+        self.setLyricsEnabled(value)
+
     @Property(bool, notify=lyricsChanged)
     def lyricsAvailable(self) -> bool:
         return bool(self._lyrics_document.lines)
@@ -273,7 +284,7 @@ class PlayerBackend(QObject):
     def currentLyricIndex(self) -> int:
         return self._lyrics_sync.line_index
 
-    @Property(int, notify=currentLyricChanged)
+    @Property(int, notify=currentLyricWordChanged)
     def currentLyricWordIndex(self) -> int:
         return self._lyrics_sync.word_index
 
@@ -393,6 +404,20 @@ class PlayerBackend(QObject):
         self.settings.data["lyrics_sync_mode"] = mode
         self.settings.save()
         self.lyricsSyncModeChanged.emit()
+
+    @Slot(bool)
+    def setLyricsEnabled(self, enabled: bool) -> None:
+        enabled = bool(enabled)
+        if enabled == self._lyrics_enabled:
+            return
+        self._lyrics_enabled = enabled
+        self.settings.data["lyrics_enabled"] = enabled
+        self.settings.save()
+        if not enabled:
+            self._clear_lyrics()
+        elif self.current_track is not None:
+            self._load_lyrics_for_track(self.current_track.path)
+        self.lyricsEnabledChanged.emit()
 
     @Slot()
     def reloadLyrics(self) -> None:
@@ -600,8 +625,12 @@ class PlayerBackend(QObject):
         self._lyrics_sync.set_document(self._lyrics_document)
         self.lyricsChanged.emit()
         self.currentLyricChanged.emit()
+        self.currentLyricWordChanged.emit()
 
     def _load_lyrics_for_track(self, track_path: str) -> None:
+        if not self._lyrics_enabled:
+            self._clear_lyrics()
+            return
         sidecar = find_sidecar(track_path)
         document = (
             self._lyrics_parser.parse_file(sidecar)
@@ -613,16 +642,22 @@ class PlayerBackend(QObject):
         self._lyrics_sync.update(self._position_ms)
         self.lyricsChanged.emit()
         self.currentLyricChanged.emit()
+        self.currentLyricWordChanged.emit()
 
     # Internal Signal Handlers
     def _on_position(self, position: int) -> None:
         self._position_ms = position
         old_line = self._lyrics_sync.line_index
         old_word = self._lyrics_sync.word_index
-        new_line, new_word = self._lyrics_sync.update(position)
+        if self._lyrics_enabled:
+            new_line, new_word = self._lyrics_sync.update(position)
+        else:
+            new_line, new_word = -1, -1
         self.positionChanged.emit()
-        if old_line != new_line or old_word != new_word:
+        if old_line != new_line:
             self.currentLyricChanged.emit()
+        if old_word != new_word:
+            self.currentLyricWordChanged.emit()
 
     def _on_duration(self, duration: int) -> None:
         self._duration_ms = duration if duration else (self.current_track.duration_ms if self.current_track else 0)
