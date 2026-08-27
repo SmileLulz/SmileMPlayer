@@ -1,5 +1,11 @@
 # Changelogs
 
+### v2.3
+
+- Updated UI for lyrics
+- Added smooth scrolling to lyrics panel
+- Made `install.sh` executable
+
 ### v2.2
 
 - Fixed fedora build issue

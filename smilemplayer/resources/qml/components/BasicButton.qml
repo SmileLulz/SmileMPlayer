@@ -8,6 +8,7 @@ Item {
     property string label: "Label"
 
     property real fontSize: 16
+    property bool fontBold: false
     property real padding: 16
     property real minimumWidth: 178
 
@@ -72,6 +73,7 @@ Item {
         text: root.label
         color: root.currentTextColor
         font.pixelSize: root.fontSize
+        font.bold: root.fontBold
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight

@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.2
+Version:        2.3
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -63,5 +63,7 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Thu Aug 27 2026 SmileLulz - 2.2-1
-- Fixed fedora build issue
+* Thu Aug 27 2026 SmileLulz - 2.3-1
+- Updated UI for lyrics
+- Added smooth scrolling to lyrics panel
+- Made `install.sh` executable
