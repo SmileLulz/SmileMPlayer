@@ -1,3 +1,12 @@
+smilemplayer (2.1-1) bookworm; urgency=medium
+
+  * Added LRC sidecar lyrics support
+  * Added lyrics support in UI
+  * Added `lyrics_enabled` in config
+  * Updated README.md
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 27 Aug 2026 20:07:37 +0530
+
 smilemplayer (2.0-1) bookworm; urgency=medium
 
   * Version bump to 2.0

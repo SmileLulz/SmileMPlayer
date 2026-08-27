@@ -1,5 +1,12 @@
 # Changelogs
 
+### v2.1
+
+- Added LRC sidecar lyrics support
+- Added lyrics support in UI
+- Added `lyrics_enabled` in config
+- Updated README.md
+
 ### v2.0
 
 - Fixed `debian/copyright`'s year mistake

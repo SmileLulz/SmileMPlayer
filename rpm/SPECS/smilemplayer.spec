@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.0
+Version:        2.1
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -19,9 +19,9 @@ BuildRequires:  appstream
 %pyproject_buildrequires -r
 
 %description
-SmileMPlayer is a simple and modern playlist-based local music player for Linux
-with ReplayGain support, MPRIS integration, fully customizable UI,
-Material You theme by default, and more.
+SmileMPlayer is a simple and modern playlist-focused local music player for Linux 
+with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, 
+fully customizable UI, Material You theme by default, and so on.
 
 %prep
 %autosetup -n SmileMPlayer-%{version}
@@ -31,9 +31,6 @@ Material You theme by default, and more.
 
 %install
 %pyproject_install
-
-rm -rf %{buildroot}%{python3_sitelib}/smilemplayer/__pycache__/
-rm -rf %{buildroot}%{python3_sitelib}/smilemplayer/core/__pycache__/
 
 desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
@@ -66,7 +63,8 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Wed Aug 26 2026 SmileLulz - 2.0-1
-- Version bump to 2.0
-- Fixed `debian/copyright`'s year mistake
-- Some `pyproject.toml` changes
+* Thu Aug 27 2026 SmileLulz - 2.1-1
+- Added LRC sidecar lyrics support
+- Added lyrics support in UI
+- Added `lyrics_enabled` in config
+- Updated README.md

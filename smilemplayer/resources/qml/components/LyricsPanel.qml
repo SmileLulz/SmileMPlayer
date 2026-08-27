@@ -6,6 +6,11 @@ import ".."
 Rectangle {
     id: root
 
+    topLeftRadius: 8
+    topRightRadius: 8
+    bottomLeftRadius: 28
+    bottomRightRadius: 8
+
     color: Theme.color.backgroundLight
 
     ColumnLayout {
@@ -127,24 +132,19 @@ Rectangle {
                                         id: wordText
                                         anchors.fill: parent
                                         text: modelData.text
-
-                                        readonly property bool activeLine:
-                                            lyricDelegate.current
-                                        readonly property bool elapsedWord:
-                                            activeLine &&
-                                            Api.player.currentLyricWordIndex >= 0 &&
-                                            index <= Api.player.currentLyricWordIndex
-                                        readonly property bool activeWord:
-                                            activeLine &&
+                                        color:
+                                            lyricDelegate.current &&
                                             index === Api.player.currentLyricWordIndex
-
-                                        color: elapsedWord
-                                            ? Theme.color.accent
-                                            : Theme.color.textSecondary
-                                        font.pixelSize: activeLine
+                                                ? Theme.color.accent
+                                                : lyricDelegate.current
+                                                    ? Theme.color.text
+                                                    : Theme.color.textSecondary
+                                        font.pixelSize: lyricDelegate.current
                                             ? Theme.font.sizeM
                                             : Theme.font.sizeMS
-                                        font.bold: activeWord
+                                        font.bold:
+                                            lyricDelegate.current &&
+                                            index === Api.player.currentLyricWordIndex
                                     }
 
                                     MouseArea {

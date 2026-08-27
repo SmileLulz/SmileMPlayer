@@ -3,60 +3,56 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import ".."
 
-Rectangle {
+Item {
     id: root
 
-    topLeftRadius: 28
-    topRightRadius: 8
-    bottomLeftRadius: 28
-    bottomRightRadius: 8
-
-    color: Theme.color.backgroundLight
-
-    ColumnLayout {
+    SplitView {
         anchors.fill: parent
-        anchors.margins: 16
-        spacing: 14
+        orientation: Qt.Vertical
 
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: 10
+        handle: Item { implicitHeight: 20 }
 
-            CustomButton {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                label: ""
-                fontSize: Theme.font.sizeXL / 1.05
-                padding: 12
-                onClicked: folderDialog.open()
-            }
+        Rectangle {
+            id: playlistPanel
 
-            CustomButton {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 48
-                label: ""
-                fontSize: Theme.font.sizeXXL
-                padding: 12
-                canClick: Api.library.playlistNames.length > 0
-                onClicked: Api.library.rescanCurrent()
-            }
-        }
+            SplitView.fillHeight: true
+            SplitView.minimumHeight: 180
 
-        SplitView {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            orientation: Qt.Vertical
+            topLeftRadius: 28
+            topRightRadius: 8
+            bottomLeftRadius: lyricsPanel.visible ? 8 : 28
+            bottomRightRadius: 8
 
-            handle: Rectangle {
-                implicitHeight: 8
-                color: Theme.color.backgroundLight
-            }
+            color: Theme.color.backgroundLight
 
             ColumnLayout {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                SplitView.preferredHeight: 360
-                SplitView.minimumHeight: 180
+                anchors.fill: parent
+                anchors.margins: 16
+                spacing: 14
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: 10
+
+                    CustomButton {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 48
+                        label: ""
+                        fontSize: Theme.font.sizeXL / 1.05
+                        padding: 12
+                        onClicked: folderDialog.open()
+                    }
+
+                    CustomButton {
+                        Layout.fillWidth: true
+                        Layout.preferredHeight: 48
+                        label: ""
+                        fontSize: Theme.font.sizeXXL
+                        padding: 12
+                        canClick: Api.library.playlistNames.length > 0
+                        onClicked: Api.library.rescanCurrent()
+                    }
+                }
 
                 Label {
                     Layout.fillWidth: true
@@ -67,95 +63,101 @@ Rectangle {
                     topPadding: 6
                 }
 
-                ListView {
-                    id: playlistView
+                Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    clip: true
-                    spacing: 6
-                    model: Api.library.playlistNames
 
-                    delegate: Rectangle {
-                        required property int index
-                        required property string modelData
+                    ListView {
+                        id: playlistView
+                        anchors.fill: parent
+                        clip: true
+                        spacing: 6
+                        model: Api.library.playlistNames
 
-                        width: playlistView.width
-                        height: 48
-                        radius: 14
+                        delegate: Rectangle {
+                            required property int index
+                            required property string modelData
 
-                        color: {
-                            if (index === Api.library.currentPlaylist)
-                                return Theme.color.backgroundLighter
+                            width: playlistView.width
+                            height: 48
+                            radius: 14
 
-                            return playlistMouse.containsMouse
-                                ? Qt.lighter(Theme.color.backgroundLighter, 1.08)
-                                : "transparent"
-                        }
+                            color: {
+                                if (index === Api.library.currentPlaylist)
+                                    return Theme.color.backgroundLighter
 
-                        RowLayout {
-                            anchors.fill: parent
-                            anchors.leftMargin: 12
-                            anchors.rightMargin: 10
-                            spacing: 10
-
-                            Text {
-                                text: ""
-                                color: index === Api.library.currentPlaylist
-                                       ? Theme.color.accent
-                                       : Theme.color.textSecondary
-                                font.pixelSize: Theme.font.sizeM
+                                return playlistMouse.containsMouse
+                                    ? Qt.lighter(Theme.color.backgroundLighter, 1.08)
+                                    : "transparent"
                             }
 
-                            Text {
-                                Layout.fillWidth: true
-                                Layout.minimumWidth: 0
-                                text: modelData
-                                elide: Text.ElideMiddle
-                                color: index === Api.library.currentPlaylist
-                                       ? Theme.color.text
-                                       : Theme.color.textSecondary
-                                font.pixelSize: Theme.font.sizeM
+                            RowLayout {
+                                anchors.fill: parent
+                                anchors.leftMargin: 12
+                                anchors.rightMargin: 10
+                                spacing: 10
+
+                                Text {
+                                    text: ""
+                                    color: index === Api.library.currentPlaylist
+                                           ? Theme.color.accent
+                                           : Theme.color.textSecondary
+                                    font.pixelSize: Theme.font.sizeM
+                                }
+
+                                Text {
+                                    Layout.fillWidth: true
+                                    Layout.minimumWidth: 0
+                                    text: modelData
+                                    elide: Text.ElideMiddle
+                                    color: index === Api.library.currentPlaylist
+                                           ? Theme.color.text
+                                           : Theme.color.textSecondary
+                                    font.pixelSize: Theme.font.sizeM
+                                }
+
+                                BasicButton {
+                                    Layout.preferredWidth: 32
+                                    Layout.preferredHeight: 32
+                                    label: ""
+                                    fontSize: Theme.font.sizeXL
+                                    padding: 8
+                                    opacity: hovered ? 1 : 0
+                                    onClicked: Api.library.removePlaylist(index)
+                                }
                             }
 
-                            BasicButton {
-                                Layout.preferredWidth: 32
-                                Layout.preferredHeight: 32
-                                label: ""
-                                fontSize: Theme.font.sizeXL
-                                padding: 8
-                                opacity: hovered ? 1 : 0
-                                onClicked: Api.library.removePlaylist(index)
+                            MouseArea {
+                                id: playlistMouse
+                                anchors.fill: parent
+                                z: -1
+                                hoverEnabled: true
+                                onClicked: Api.library.setCurrentPlaylist(index)
                             }
                         }
+                    }
 
-                        MouseArea {
-                            id: playlistMouse
-                            anchors.fill: parent
-                            z: -1
-                            hoverEnabled: true
-                            onClicked: Api.library.setCurrentPlaylist(index)
-                        }
+                    Text {
+                        anchors.centerIn: parent
+                        width: parent.width - 24
+                        visible: Api.library.playlistNames.length === 0
+                        text: "Click '+' to add a folder as playlist"
+                        color: Theme.color.textSecondary
+                        font.pixelSize: Theme.font.sizeS
+                        horizontalAlignment: Text.AlignHCenter
+                        wrapMode: Text.Wrap
                     }
                 }
             }
-
-            LyricsPanel {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                SplitView.preferredHeight: 300
-                SplitView.minimumHeight: 180
-            }
         }
 
-        Text {
-            Layout.fillWidth: true
-            text: Api.library.playlistNames.length === 0
-                  ? "Add a folder as a playlist. Subfolders are scanned automatically."
-                  : "Folders are stored in ~/.config/SmileMPlayer/config.json"
+        LyricsPanel {
+            id: lyricsPanel
 
-            color: Theme.color.textSecondary
-            font.pixelSize: Theme.font.sizeS
-            wrapMode: Text.Wrap
+            visible: Api.player !== null && Api.player.lyricsEnabled
+            SplitView.preferredHeight: visible ? 500 : 0
+            SplitView.minimumHeight: visible ? 180 : 0
+            Layout.fillWidth: visible
         }
     }
 }

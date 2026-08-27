@@ -1,20 +1,16 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/data/icons/smilemplayer-512.png" width="150px" alt="SmileMPlayer" />
+  <img alt="SmileMPlayer Logo" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/data/icons/smilemplayer-512.png" width="150px"/>
   <h1>🎵 SmileMPlayer 🎵</h1>
-  <h3>
-    A simple and modern-looking playlist-based local music player for Linux desktops.
-    <br/>For non-audiophiles.<br>
-  </h3>
+  <h3>A simple and modern playlist-focused local music player for Linux desktops.</h3>
+  <p>SmileMPlayer is a simple and modern playlist-focused local music player for Linux with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, fully customizable UI, Material You theme by default, and so on.</p>
   <br></br>
-  <img alt="SmileMPlayer Logo" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
+  <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
 </div>
 
 <br></br>
 
-> [!WARNING]
-> This project was meant to be a personal project, but thought it would be nice to share it with others.
-> 
-> By the way, I am not accepting contributions. Thank you. Hope you like my app :)
+> [!NOTE]
+> This project was meant to be a personal project, but feel happy to share it with others. Therefore, I am not accepting contributions. Thank you. Hope you like my app :)
 
 # ✨ Features
 
@@ -22,79 +18,36 @@
 - Material You theme by default
 - Folder-based playlist management
 - Tracks sorting
+- LRC sidecar lyrics support
 - ReplayGain 2.0 support
 - MPRIS integration
-- All basic things, like cover art, controls, volume, etc...
-- See [TODO.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/TODO.md) for more planned features
+- All the basic things, like cover art, controls, volume, etc...
+- See [WIKI.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md) for more help
 
-**See [CHANGELOG.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md) for latest update information. See [WIKI.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md) for more help.**
+**See [CHANGELOG.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md) for latest update information.**
 
 
-# 🔗 Dependencies
-
-All dependencies used as APIs, no packages are bundled.
-
-⚠︎ Dependencies will auto-install during app installation, no need to install them manually.
+# 🔗 ( IMPORTANT ) Dependency Notes
 
 > [!WARNING]
-> You'll have to install a nerd font for icon support if you don't have any. The recommended option is JetBrainsMono Nerd Font.
->
-> Only the Arch Linux package provides the `ttf-jetbrains-mono-nerd` font as a dependency, so you won't need to install manually.
+> It is not recommended to install with `pip`. Installing with python `pip` won't install the system dependencies, you'll have to install them manually.
 
-### Python PIP
+You'll have to install a nerd font for icon support if you don't have any. The recommended option is **[JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads)**.
 
-> ⚠︎ Manual nerd font installation required.
+You don't need install it manually on any **Arch Linux** distribution; since the `ttf-jetbrains-mono-nerd` package is available in **Extra & AUR**. So it will be automatically installed.
 
-- `PySide6`
-- `mutagen`
-- `dbus-next`
-
-### Arch Linux
-
-- `python`
-- `pyside6`
-- `python-mutagen`
-- `python-dbus-next`
-- `qt6-multimedia-ffmpeg`
-- `ttf-jetbrains-mono-nerd`
-
-### Debian
-
-> ⚠︎ Manual nerd font installation required.
+Below command will install the **JetBrainsMono Nerd Font**; in/for other distros.
 
 ```sh
 mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
 ```
 
-- `python3`
-- `python3-pyside6.qtcore`
-- `python3-pyside6.qtgui`
-- `python3-pyside6.qtqml`
-- `python3-pyside6.qtmultimedia`
-- `python3-pyside6.qtdbus`
-- `python3-pyside6.qtwidgets`
-- `python3-mutagen`
-- `python3-dbus-next`
-
-### Fedora
-
-> ⚠︎ Manual nerd font installation required.
-
-```sh
-mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
-```
-
-- `python3`
-- `python3-pyside6`
-- `python3-mutagen`
-- `python3-dbus-next`
+See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md) for more dependency information.
 
 
 # 📥 Install
 
-> ⚠︎ You have to install a nerd font for icon support. The recommended option is JetBrainsMono Nerd Font.
-
-> Replace any `x.x` with the actual version tag.
+_Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
 
 ### For any distro
 
@@ -121,6 +74,8 @@ bash install.sh
 
 ### Python PIP
 
+> Replace any `x.x` with the actual version tag.
+
 1. Download the `.whl` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
 
 2. Install:
@@ -136,6 +91,8 @@ pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
 
 # 📦 Build by yourself
 
+_Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
+
 > Replace any `x.x` with the actual version tag.
 
 ### Clone the repository
@@ -150,30 +107,16 @@ git clone https://github.com/SmileLulz/SmileMPlayer.git && cd SmileMPlayer
 python -m smilemplayer
 ```
 
-### Build for python pip
-
-```sh
-# Build the package
-python -m build
-
-# Install locally
-python -m pip install .
-
-# Install locally for development
-python -m pip install -e .
-```
-
 ### Build for Arch Linux
 
-Dependencies:
-
-- `python-hatchling`
-- `python-build`
-- `python-installer`
-- `python-wheel`
+Build dependencies:
 
 ```sh
-sudo pacman -S --needed python-hatchling python-build python-installer python-wheel
+sudo pacman -S --needed \
+    python-hatchling \
+    python-build \
+    python-installer \
+    python-wheel
 ```
 
 Build and install in one go (recommended):
@@ -182,27 +125,19 @@ Build and install in one go (recommended):
 makepkg -si
 ```
 
-Or:
+Or build first, then install:
 
 ```sh
 # Build first
 makepkg -s
 
-#And then install
+# And then install
 sudo pacman -U smilemplayer-x.x-1-any.pkg.tar.zst
 ```
 
 ### Build for Debian
 
-Dependencies:
-
-- `build-essential`
-- `debhelper`
-- `desktop-file-utils`
-- `python3-all`
-- `python3-hatchling`
-- `pybuild-plugin-pyproject`
-- `dh-sequence-python3`
+Build dependencies:
 
 ```sh
 sudo apt install \
@@ -216,13 +151,13 @@ sudo apt install \
     dh-sequence-python3
 ```
 
-Build:
+1. Build:
 
 ```sh
 dpkg-buildpackage -b -us -uc
 ```
 
-Install:
+2. Install:
 
 ```sh
 sudo apt install ../smilemplayer_x.x-1_all.deb
@@ -230,15 +165,20 @@ sudo apt install ../smilemplayer_x.x-1_all.deb
 
 ### Build for Fedora
 
-Dependencies:
+Build dependencies:
 
-- `appstream`
-- `rpm-build`
-- `rpmdevtools`
-- `python3-devel`
-- `python3-hatchling`
-- `python3-pip`
-- `desktop-file-utils`
+```sh
+sudo dnf install \
+    git \
+    appstream \
+    rpm-build \
+    rpmdevtools \
+    python3-devel \
+    python3-hatchling \
+    python3-pip \
+    desktop-file-utils \
+    python3-rpm-generators
+```
 
 Create required directories:
 
@@ -246,52 +186,85 @@ Create required directories:
 mkdir -p rpm/{BUILD,BUILDROOT,RPMS,SOURCES,SRPMS}
 ```
 
-**⚠︎ Now, you have two options for your build:**
+> [!NOTE]
+> Now, you have two options to build:
+> 
+> Option 1: Use the release source archive.
+>
+> Option 2: Use a specific commit source archive.
 
-**Option 1:** Use the release source archive:
+**Option 1:**
 
-This is for most users who want to just build the release version.
+_This is for most users who just want to build the release version._
 
-> If you want to build an old or any previous version/commit, do `git checkout` to that commit tag first (e.g. `git checkout v1.6`).
+> Make sure to `git checkout` to that commit tag first (e.g. `git checkout v1.6`).
 
-Download the release source archive:
+1. Download the release source archive:
 
 ```sh
 spectool --define "_topdir $PWD/rpm" rpm/SPECS/smilemplayer.spec
 ```
 
-Build:
+2. Build:
 
 ```sh
 rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
 ```
 
-Install:
+3. Install:
 
 ```sh
 sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```
 
-**Option 2:** Use the local or specific commit source archive:
+**Option 2:**
 
-This is for local testing or building a specific version.
+_This is mostly for local testing or building from a specific commit._
 
-> If you want to build an old or any previous version/commit, do `git checkout` to that commit first (e.g. `git checkout <commit_hash_or_tag>`).
+> Make sure to `git checkout` to that commit first (e.g. `git checkout <commit_hash_or_tag>`).
 
-Create the source archive from current commit (replace `x.x` with the actual version):
+1. Create the source archive from current commit (replace `x.x` with the actual version):
 
 ```sh
 git archive --format=tar.gz --prefix=SmileMPlayer-x.x/ HEAD > rpm/SOURCES/vx.x.tar.gz
 ```
 
-Build:
+2. Build:
 
 ```sh
 rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
 ```
 
-Install:
+3. Install:
 
 ```sh
 sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```
+
+### Build for python pip
+
+_Not recommended._
+
+1. Build:
+
+```sh
+python -m build
+```
+
+2. Install locally:
+
+```sh
+python -m pip install .
+```
+Or install locally for development puposes:
+
+```sh
+python -m pip install -e .
+```
+
+
+# 🧾 License
+
+This project is licensed under the GNU General Public License v3.0 only.
+
+Also see [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md).
