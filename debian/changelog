@@ -1,3 +1,9 @@
+smilemplayer (2.4-1) bookworm; urgency=medium
+
+  * Theme color update
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Fri, 28 Aug 2026 00:21:45 +0530
+
 smilemplayer (2.3-1) bookworm; urgency=medium
 
   * Updated UI for lyrics

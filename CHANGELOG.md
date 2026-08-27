@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.4
+
+- Theme color update
+
 ### v2.3
 
 - Updated UI for lyrics

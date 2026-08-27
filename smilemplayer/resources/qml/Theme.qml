@@ -4,19 +4,19 @@ import QtQuick
 
 QtObject {
     readonly property QtObject color: QtObject {
-        readonly property color accent: "#FFB4C8"
-        readonly property color accentDark: "#6D2B4A"
+        readonly property color accent: "#c9beff"
+        readonly property color accentDark: "#605790"
 
-        readonly property color background: "#1C1B1F"
-        readonly property color backgroundLight: "#2B2930"
-        readonly property color backgroundLighter: "#3A3740"
-        readonly property color backgroundDarker: "#211F26"
+        readonly property color background: "#1c1b20"
+        readonly property color backgroundLight: Qt.lighter("#201f25", 1.1)
+        readonly property color backgroundLighter: Qt.darker("#605c71", 1.8)
+        readonly property color backgroundDarker: background
 
-        readonly property color text: "#E6E1E5"
-        readonly property color textSecondary: "#CAC4D0"
+        readonly property color text: "#c9c5d0"
+        readonly property color textSecondary: "#938f99"
 
-        readonly property color border: "#4A4458"
-        readonly property color error: "#F2B8B5"
+        readonly property color border: Qt.darker("#c9beff", 1.8)
+        readonly property color error: "#ffb4ab"
     }
 
     readonly property QtObject font: QtObject {
