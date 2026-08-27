@@ -7,6 +7,7 @@ from PySide6.QtCore import QObject, Property, QTimer, QUrl, Signal, Slot
 from PySide6.QtMultimedia import QMediaPlayer
 
 from .library import LibraryManager
+from .lyrics import LrcParser, LyricsDocument, LyricsSynchronizer, find_sidecar
 from .media_player import MediaPlayer
 from .models import Track
 from .playlist_model import PlaylistModel
@@ -32,6 +33,8 @@ class PlayerBackend(QObject):
     capabilitiesChanged = Signal()
     sortKeyChanged = Signal()
     replayGainChanged = Signal()
+    lyricsChanged = Signal()
+    currentLyricChanged = Signal()
 
     LOOP_MODES = ("none", "track", "playlist")
     REPLAYGAIN_MODES = ("track", "album")
@@ -71,6 +74,10 @@ class PlayerBackend(QObject):
         self._last_error = ""
         self._sort_key = str(settings.data.get("sort", "title"))
         self._sort_desc = bool(settings.data.get("sort_desc", False))
+
+        self._lyrics_parser = LrcParser()
+        self._lyrics_sync = LyricsSynchronizer()
+        self._lyrics_document = LyricsDocument(lines=tuple())
 
         self._volume_save_timer = QTimer(self)
         self._volume_save_timer.setSingleShot(True)
@@ -221,6 +228,51 @@ class PlayerBackend(QObject):
     def sortKey(self) -> str:
         return self._sort_key
 
+    @Property(bool, notify=lyricsChanged)
+    def lyricsAvailable(self) -> bool:
+        return bool(self._lyrics_document.lines)
+
+    @Property(list, notify=lyricsChanged)
+    def lyrics(self) -> list[dict]:
+        return [
+            {
+                "timestampMs": line.timestamp_ms,
+                "text": line.text,
+                "enhanced": line.enhanced,
+                "words": [
+                    {
+                        "timestampMs": word.timestamp_ms,
+                        "text": word.text,
+                    }
+                    for word in line.words
+                ],
+            }
+            for line in self._lyrics_document.lines
+        ]
+
+    @Property(dict, notify=lyricsChanged)
+    def lyricsMetadata(self) -> dict:
+        return dict(self._lyrics_document.metadata)
+
+    @Property(int, notify=lyricsChanged)
+    def lyricsOffsetMs(self) -> int:
+        return self._lyrics_document.offset_ms
+
+    @Property(int, notify=currentLyricChanged)
+    def currentLyricIndex(self) -> int:
+        return self._lyrics_sync.line_index
+
+    @Property(int, notify=currentLyricChanged)
+    def currentLyricWordIndex(self) -> int:
+        return self._lyrics_sync.word_index
+
+    @Property(str, notify=currentLyricChanged)
+    def currentLyricText(self) -> str:
+        index = self._lyrics_sync.line_index
+        if 0 <= index < len(self._lyrics_document.lines):
+            return self._lyrics_document.lines[index].text
+        return ""
+
     @property
     def current_track(self) -> Track | None:
         return self.playlistModel.track(self._current_index)
@@ -234,6 +286,7 @@ class PlayerBackend(QObject):
         self._current_index = index
         self._position_ms = 0
         self._duration_ms = track.duration_ms
+        self._load_lyrics_for_track(track.path)
         self._apply_replaygain()
         self._media.setSource(QUrl.fromLocalFile(track.path))
         if autoplay:
@@ -304,6 +357,29 @@ class PlayerBackend(QObject):
     @Slot(int)
     def seek(self, position_ms: int) -> None:
         self._seek_internal(position_ms)
+
+    @Slot(int)
+    def seekToLyric(self, index: int) -> None:
+        if not 0 <= index < len(self._lyrics_document.lines):
+            return
+        self._seek_internal(self._lyrics_document.lines[index].timestamp_ms)
+
+    @Slot(int, int)
+    def seekToLyricWord(self, line_index: int, word_index: int) -> None:
+        if not 0 <= line_index < len(self._lyrics_document.lines):
+            return
+        words = self._lyrics_document.lines[line_index].words
+        if not 0 <= word_index < len(words):
+            return
+        self._seek_internal(words[word_index].timestamp_ms)
+
+    @Slot()
+    def reloadLyrics(self) -> None:
+        track = self.current_track
+        if track is None:
+            self._clear_lyrics()
+            return
+        self._load_lyrics_for_track(track.path)
 
     def _seek_internal(self, position_ms: int) -> None:
         self._media.seek(position_ms)
@@ -497,10 +573,35 @@ class PlayerBackend(QObject):
         if self._last_error:
             self.statusMessage.emit(self._last_error)
 
+    # Lyrics
+    def _clear_lyrics(self) -> None:
+        self._lyrics_document = LyricsDocument(lines=tuple())
+        self._lyrics_sync.set_document(self._lyrics_document)
+        self.lyricsChanged.emit()
+        self.currentLyricChanged.emit()
+
+    def _load_lyrics_for_track(self, track_path: str) -> None:
+        sidecar = find_sidecar(track_path)
+        document = (
+            self._lyrics_parser.parse_file(sidecar)
+            if sidecar is not None
+            else LyricsDocument(lines=tuple())
+        )
+        self._lyrics_document = document
+        self._lyrics_sync.set_document(document)
+        self._lyrics_sync.update(self._position_ms)
+        self.lyricsChanged.emit()
+        self.currentLyricChanged.emit()
+
     # Internal Signal Handlers
     def _on_position(self, position: int) -> None:
         self._position_ms = position
+        old_line = self._lyrics_sync.line_index
+        old_word = self._lyrics_sync.word_index
+        new_line, new_word = self._lyrics_sync.update(position)
         self.positionChanged.emit()
+        if old_line != new_line or old_word != new_word:
+            self.currentLyricChanged.emit()
 
     def _on_duration(self, duration: int) -> None:
         self._duration_ms = duration if duration else (self.current_track.duration_ms if self.current_track else 0)
@@ -532,6 +633,7 @@ class PlayerBackend(QObject):
         self._current_index = -1
         self._position_ms = 0
         self._duration_ms = 0
+        self._clear_lyrics()
         self._media.setVolume(self._master_volume)
         self.trackChanged.emit(-1)
         self.currentTrackChanged.emit()
@@ -554,6 +656,7 @@ class PlayerBackend(QObject):
         self._current_index = -1
         self._position_ms = 0
         self._duration_ms = 0
+        self._clear_lyrics()
 
         self._media.setVolume(self._master_volume)
 
