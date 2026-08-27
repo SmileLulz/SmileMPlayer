@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.2
+
+- Fixed fedora build issue
+
 ### v2.2.b1
 
 - Fixing fedora build workflow

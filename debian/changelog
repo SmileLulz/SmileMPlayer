@@ -1,3 +1,15 @@
+smilemplayer (2.2-1) bookworm; urgency=medium
+
+  * Fixed fedora build issue
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 27 Aug 2026 20:18:14 +0530
+
+smilemplayer (2.2-1) bookworm; urgency=medium
+
+  * Fixed fedora build workflow
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Thu, 27 Aug 2026 20:16:38 +0530
+
 smilemplayer (2.2.b1-1) bookworm; urgency=medium
 
   * Fixing fedora build workflow
