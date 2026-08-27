@@ -42,85 +42,108 @@ Rectangle {
             }
         }
 
-        Label {
-            Layout.fillWidth: true
-            text: "Playlists"
-            color: Theme.color.textSecondary
-            font.pixelSize: Theme.font.sizeL
-            font.bold: true
-            topPadding: 6
-        }
-
-        ListView {
-            id: playlistView
+        SplitView {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            clip: true
-            spacing: 6
-            model: Api.library.playlistNames
+            orientation: Qt.Vertical
 
-            delegate: Rectangle {
-                required property int index
-                required property string modelData
+            handle: Rectangle {
+                implicitHeight: 8
+                color: Theme.color.backgroundLight
+            }
 
-                width: playlistView.width
-                height: 48
-                radius: 14
+            ColumnLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                SplitView.preferredHeight: 360
+                SplitView.minimumHeight: 180
 
-                color: {
-                    if (index === Api.library.currentPlaylist)
-                        return Theme.color.backgroundLighter
-
-                    return playlistMouse.containsMouse
-                        ? Qt.lighter(Theme.color.backgroundLighter, 1.08)
-                        : "transparent"
+                Label {
+                    Layout.fillWidth: true
+                    text: "Playlists"
+                    color: Theme.color.textSecondary
+                    font.pixelSize: Theme.font.sizeL
+                    font.bold: true
+                    topPadding: 6
                 }
 
-                RowLayout {
-                    anchors.fill: parent
-                    anchors.leftMargin: 12
-                    anchors.rightMargin: 10
-                    spacing: 10
+                ListView {
+                    id: playlistView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    clip: true
+                    spacing: 6
+                    model: Api.library.playlistNames
 
-                    Text {
-                        text: ""
-                        color: index === Api.library.currentPlaylist
-                               ? Theme.color.accent
-                               : Theme.color.textSecondary
+                    delegate: Rectangle {
+                        required property int index
+                        required property string modelData
 
-                        font.pixelSize: Theme.font.sizeM
-                    }
+                        width: playlistView.width
+                        height: 48
+                        radius: 14
 
-                    Text {
-                        Layout.fillWidth: true
-                        Layout.minimumWidth: 0
-                        text: modelData
-                        elide: Text.ElideMiddle
-                        color: index === Api.library.currentPlaylist
-                               ? Theme.color.text
-                               : Theme.color.textSecondary
+                        color: {
+                            if (index === Api.library.currentPlaylist)
+                                return Theme.color.backgroundLighter
 
-                        font.pixelSize: Theme.font.sizeM
-                    }
+                            return playlistMouse.containsMouse
+                                ? Qt.lighter(Theme.color.backgroundLighter, 1.08)
+                                : "transparent"
+                        }
 
-                    BasicButton {
-                        Layout.preferredWidth: 32
-                        Layout.preferredHeight: 32
-                        label: ""
-                        fontSize: Theme.font.sizeXL
-                        padding: 8
-                        opacity: hovered ? 1 : 0
-                        onClicked: Api.library.removePlaylist(index)
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 12
+                            anchors.rightMargin: 10
+                            spacing: 10
+
+                            Text {
+                                text: ""
+                                color: index === Api.library.currentPlaylist
+                                       ? Theme.color.accent
+                                       : Theme.color.textSecondary
+                                font.pixelSize: Theme.font.sizeM
+                            }
+
+                            Text {
+                                Layout.fillWidth: true
+                                Layout.minimumWidth: 0
+                                text: modelData
+                                elide: Text.ElideMiddle
+                                color: index === Api.library.currentPlaylist
+                                       ? Theme.color.text
+                                       : Theme.color.textSecondary
+                                font.pixelSize: Theme.font.sizeM
+                            }
+
+                            BasicButton {
+                                Layout.preferredWidth: 32
+                                Layout.preferredHeight: 32
+                                label: ""
+                                fontSize: Theme.font.sizeXL
+                                padding: 8
+                                opacity: hovered ? 1 : 0
+                                onClicked: Api.library.removePlaylist(index)
+                            }
+                        }
+
+                        MouseArea {
+                            id: playlistMouse
+                            anchors.fill: parent
+                            z: -1
+                            hoverEnabled: true
+                            onClicked: Api.library.setCurrentPlaylist(index)
+                        }
                     }
                 }
+            }
 
-                MouseArea {
-                    id: playlistMouse
-                    anchors.fill: parent
-                    z: -1
-                    hoverEnabled: true
-                    onClicked: Api.library.setCurrentPlaylist(index)
-                }
+            LyricsPanel {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                SplitView.preferredHeight: 300
+                SplitView.minimumHeight: 180
             }
         }
 

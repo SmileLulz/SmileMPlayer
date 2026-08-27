@@ -23,6 +23,7 @@ class AppSettings:
         "replaygain_preamp_db": 0.0,
         "master_gain_db": 4.0,
         "replaygain_prevent_clipping": True,
+        "lyrics_sync_mode": "line",
     }
 
     def __init__(self, config_dir: str) -> None:

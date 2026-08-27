@@ -35,6 +35,7 @@ class PlayerBackend(QObject):
     replayGainChanged = Signal()
     lyricsChanged = Signal()
     currentLyricChanged = Signal()
+    lyricsSyncModeChanged = Signal()
 
     LOOP_MODES = ("none", "track", "playlist")
     REPLAYGAIN_MODES = ("track", "album")
@@ -78,6 +79,8 @@ class PlayerBackend(QObject):
         self._lyrics_parser = LrcParser()
         self._lyrics_sync = LyricsSynchronizer()
         self._lyrics_document = LyricsDocument(lines=tuple())
+        lyrics_sync_mode = str(settings.data.get("lyrics_sync_mode", "line"))
+        self._lyrics_sync_mode = lyrics_sync_mode if lyrics_sync_mode in ("line", "word") else "line"
 
         self._volume_save_timer = QTimer(self)
         self._volume_save_timer.setSingleShot(True)
@@ -258,6 +261,14 @@ class PlayerBackend(QObject):
     def lyricsOffsetMs(self) -> int:
         return self._lyrics_document.offset_ms
 
+    @Property(str, notify=lyricsSyncModeChanged)
+    def lyricsSyncMode(self) -> str:
+        return self._lyrics_sync_mode
+
+    @lyricsSyncMode.setter
+    def lyricsSyncMode(self, value: str) -> None:
+        self.setLyricsSyncMode(value)
+
     @Property(int, notify=currentLyricChanged)
     def currentLyricIndex(self) -> int:
         return self._lyrics_sync.line_index
@@ -372,6 +383,16 @@ class PlayerBackend(QObject):
         if not 0 <= word_index < len(words):
             return
         self._seek_internal(words[word_index].timestamp_ms)
+
+    @Slot(str)
+    def setLyricsSyncMode(self, mode: str) -> None:
+        mode = str(mode)
+        if mode not in ("line", "word") or mode == self._lyrics_sync_mode:
+            return
+        self._lyrics_sync_mode = mode
+        self.settings.data["lyrics_sync_mode"] = mode
+        self.settings.save()
+        self.lyricsSyncModeChanged.emit()
 
     @Slot()
     def reloadLyrics(self) -> None:
