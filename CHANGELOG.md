@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.6.b2
+
+- Fixing windows installer build
+
 ### v2.6.b1
 
 - Testing windows builds

@@ -25,7 +25,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
-SetupArchitecture=x64
+; SetupArchitecture=x64
 
 Compression=lzma2
 SolidCompression=yes
