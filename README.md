@@ -3,7 +3,7 @@
   <h1>🎵 SmileMPlayer 🎵</h1>
   <h3>A simple and modern playlist-focused local music player for Linux desktops.</h3>
   <p>SmileMPlayer is a simple and modern playlist-focused local music player for Linux with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, fully customizable UI, Material You theme by default, and so on.</p>
-  <h3>Available For <a href="#-install">Linux</a> & Windows</h2>
+  <h3>Available For <a href="#-install">Linux</a> & <a href="#windows">Windows</a></h2>
   <br></br>
   <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
 </div>
