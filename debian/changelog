@@ -1,3 +1,9 @@
+smilemplayer (2.6.b3-1) unstable; urgency=medium
+
+  * Fixing windows installer build
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sat, 29 Aug 2026 00:48:32 +0530
+
 smilemplayer (2.6.b2-1) unstable; urgency=medium
 
   * Fixing windows installer build
