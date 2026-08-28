@@ -50,7 +50,7 @@ See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPEND
 
 _Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
 
-### For any distro
+### (Linux) For any distro
 
 This will install the latest release on any distribution (Arch, Debain, Fedora based distros; but sadly not for Void Linux yet).
 
@@ -73,7 +73,26 @@ less install.sh
 bash install.sh
 ```
 
-### Python PIP
+### Windows
+
+> [!NOTE]
+> There are three types of files you can download, CHOOSE ONE.
+
+Go to [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
+
+Option 1: Installer setup (recommended):
+
+- Download the `SmileMPlayer-x.x-windows-x64-setup.exe` file and install it.
+
+Option 2: Standalone `exe`:
+
+- Download the `SmileMPlayer-x.x-windows-x64.exe` file and run it directly.
+
+Option 3: `zip` archive:
+
+- Download the `SmileMPlayer-x.x-windows-x64.zip` file, extract it anywhere, then run the `SmileMPlayer.exe`.
+
+### (Linux) Python PIP
 
 > Replace any `x.x` with the actual version tag.
 

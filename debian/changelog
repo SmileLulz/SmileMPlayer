@@ -1,3 +1,12 @@
+smilemplayer (2.6-1) bookworm; urgency=medium
+
+  * Added Windows build support
+  * Added a separate `WINDOWS-README.md` for Windows build guide
+  * Updated `README.md`
+  * Some useful project changes
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sat, 29 Aug 2026 03:08:21 +0530
+
 smilemplayer (2.6.b4-1) unstable; urgency=medium
 
   * Fixing windows artifact preparation in github workflow

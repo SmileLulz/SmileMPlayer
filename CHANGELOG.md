@@ -1,5 +1,12 @@
 # Changelogs
 
+### v2.6
+
+- Added Windows build support
+- Added a separate `WINDOWS-README.md` for Windows build guide
+- Updated `README.md`
+- Some useful project changes
+
 ### v2.6.b4
 
 - Fixing windows artifact preparation in github workflow

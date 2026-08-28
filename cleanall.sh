@@ -1,31 +1,62 @@
 #!/bin/bash
 
-rm -rf smilemplayer/__pycache__/
-rm -rf smilemplayer/core/__pycache__/
-rm -rf .pybuild/
-rm -rf build/
-rm -rf dist/
-rm -rf pkg/
-rm -rf src/
-rm -rf debian/.debhelper/
-rm -rf debian/smilemplayer/
-# rm -rf review-smilemplayer/
+echo -e "\033[1;33mCleaning...\033[0m"
 
-rm -rf rpm/BUILD/*
-rm -rf rpm/BUILDROOT/*
-rm -rf rpm/RPMS/*
-rm -rf rpm/SOURCES/*
-rm -rf rpm/SRPMS/*
+# Directories
+directories=(
+    ".pybuild"
+    "build"
+    "dist"
+    "pkg"
+    "src"
+    "debian/.debhelper"
+    "debian/smilemplayer"
+    "rpm/BUILD"
+    "rpm/BUILDROOT"
+    "rpm/RPMS"
+    "rpm/SOURCES"
+    "rpm/SRPMS"
+)
 
-rm -f smilemplayer-*.pkg.tar.zst
-# rm -f *.spec
-rm -f smilemplayer-*.rpm
-rm -f smilemplayer_*.deb
-rm -f ../smilemplayer_*.deb
-rm -f ../smilemplayer_*.buildinfo
-rm -f ../smilemplayer_*.changes
-rm -f debian/debhelper-build-stamp
-rm -f debian/files
-rm -f debian/*.substvars
-rm -f debian/*.debhelper
-rm -f debian/*.log
+for dir in "${directories[@]}"; do
+    if [ -d "$dir" ]; then
+        rm -rf "$dir"
+        echo -e "Removed: $dir"
+    fi
+done
+
+# Files
+file_patterns=(
+    "smilemplayer-*.pkg.tar.zst"
+    "smilemplayer-*.rpm"
+    "smilemplayer_*.deb"
+    "../smilemplayer_*.deb"
+    "../smilemplayer_*.buildinfo"
+    "../smilemplayer_*.changes"
+    "debian/debhelper-build-stamp"
+    "debian/files"
+    "debian/*.substvars"
+    "debian/*.debhelper"
+    "debian/*.log"
+)
+
+for pattern in "${file_patterns[@]}"; do
+    if [[ "$pattern" == *[*?[]* ]]; then
+        shopt -s nullglob
+        files=($pattern)
+        shopt -u nullglob
+        if [ ${#files[@]} -gt 0 ]; then
+            rm -f "${files[@]}"
+            echo -e "Removed: $pattern (${#files[@]} files)"
+        fi
+    else
+        if [ -f "$pattern" ]; then
+            rm -f "$pattern"
+            echo -e "Removed: $pattern"
+        fi
+    fi
+done
+
+find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null
+
+echo -e "\033[0;32mCleanup complete\033[0m"

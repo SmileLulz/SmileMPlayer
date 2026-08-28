@@ -32,22 +32,39 @@ a = Analysis(
 
 pyz = PYZ(a.pure)
 
-exe = EXE(
-    pyz,
-    a.scripts,
-    a.binaries,
-    a.datas,
-    [],
-    name="SmileMPlayer",
-    debug=False,
-    bootloader_ignore_signals=False,
-    strip=False,
-    upx=False,
-    console=False,
-    icon=str(project_root / "data/icons/smilemplayer.ico")
-)
+if onefile:
+    exe = EXE(
+        pyz,
+        a.scripts,
+        a.binaries,
+        a.datas,
+        [],
+        name="SmileMPlayer",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=False,
+        console=False,
+        icon=str(project_root / "data/icons/smilemplayer.ico"),
+    )
 
-if not onefile:
+else:
+    exe = EXE(
+        pyz,
+        a.scripts,
+        [],
+        [],
+        [],
+        exclude_binaries=True,
+        name="SmileMPlayer",
+        debug=False,
+        bootloader_ignore_signals=False,
+        strip=False,
+        upx=False,
+        console=False,
+        icon=str(project_root / "data/icons/smilemplayer.ico"),
+    )
+
     coll = COLLECT(
         exe,
         a.binaries,
