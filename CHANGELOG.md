@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.6.b4
+
+- Fixing windows artifact preparation in github workflow
+
 ### v2.6.b3
 
 - Fixing windows installer build

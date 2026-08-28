@@ -408,14 +408,35 @@ jobs:
             exit $LASTEXITCODE
           }
 
-          Write-Host "Inno Setup output:"
-          Get-ChildItem "dist\installer" -File |
-            Select-Object Name, Length, LastWriteTime
+          $installer = Get-ChildItem `
+            "dist\installer" `
+            -Filter "*.exe" `
+            -File `
+            -ErrorAction SilentlyContinue
+
+          if ($installer.Count -ne 1) {
+            Write-Error "Expected exactly one Inno Setup installer, found $($installer.Count)."
+            Get-ChildItem "dist\installer" -Force
+            exit 1
+          }
+
+          New-Item -ItemType Directory -Force -Path "windows-release" | Out-Null
+
+          $version = (python installer\get_version.py).Trim()
+          $installerName = "SmileMPlayer-$version-windows-x64-setup.exe"
+
+          Copy-Item `
+            $installer.FullName `
+            "windows-release\$installerName"
+
+          Write-Host "Staged installer:"
+          Get-Item "windows-release\$installerName" |
+            Select-Object Name, Length, FullName
 
       - name: Build PyInstaller onefile
         shell: pwsh
         run: |
-          Remove-Item -Recurse -Force build, dist
+          Remove-Item -Recurse -Force build, dist -ErrorAction SilentlyContinue
 
           $env:SMILEMPLAYER_ONEFILE = "1"
 
@@ -439,50 +460,17 @@ jobs:
 
           New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
 
-          # ZIP from the onedir build.
           Copy-Item `
             "SmileMPlayer-$version-windows-x64.zip" `
             "$artifactDir\SmileMPlayer-$version-windows-x64.zip"
 
-          # Onefile executable.
           Copy-Item `
             "dist\SmileMPlayer.exe" `
             "$artifactDir\SmileMPlayer-$version-windows-x64.exe"
 
-          # Locate the Inno Setup output without assuming its exact filename.
-          $installers = @(
-            Get-ChildItem `
-              "dist\installer" `
-              -Filter "*.exe" `
-              -File `
-              -ErrorAction SilentlyContinue
-          )
-
-          if ($installers.Count -eq 0) {
-            Write-Error "No Inno Setup installer was found."
-            Write-Host "Contents of dist\installer:"
-            Get-ChildItem "dist\installer" -Force
-            exit 1
-          }
-
-          if ($installers.Count -gt 1) {
-            Write-Error "Multiple Inno Setup executables were found:"
-            $installers | Select-Object FullName, Length
-            exit 1
-          }
-
-          $installer = $installers[0]
-
-          $installerName =
-            "SmileMPlayer-$version-windows-x64-setup.exe"
-
-          Copy-Item `
-            $installer.FullName `
-            "$artifactDir\$installerName"
-
           Write-Host "Windows release artifacts:"
           Get-ChildItem $artifactDir |
-            Select-Object Name, Length
+            Select-Object Name, Length, FullName
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v7
@@ -582,12 +570,7 @@ jobs:
 
           test -n "$(find artifacts/windows \
             -type f \
-            -name '*-windows-x64.exe' \
-            -print -quit)"
-
-          test -n "$(find artifacts/windows \
-            -type f \
-            -name '*-windows-x64-setup.exe' \
+            -name '*.exe' \
             -print -quit)"
 
       - name: Create or update GitHub Release

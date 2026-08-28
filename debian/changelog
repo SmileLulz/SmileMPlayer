@@ -1,3 +1,9 @@
+smilemplayer (2.6.b4-1) unstable; urgency=medium
+
+  * Fixing windows artifact preparation in github workflow
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sat, 29 Aug 2026 01:03:15 +0530
+
 smilemplayer (2.6.b3-1) unstable; urgency=medium
 
   * Fixing windows installer build

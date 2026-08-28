@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.6.b3
+Version:        2.6.b4
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -63,5 +63,5 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Sat Aug 29 2026 SmileLulz - 2.6.b3-1
-- Fixing windows installer build
+* Sat Aug 29 2026 SmileLulz - 2.6.b4-1
+- Fixing windows artifact preparation in github workflow
