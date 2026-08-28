@@ -1,5 +1,9 @@
 # Changelogs
 
+### v2.6.b1
+
+- Testing windows builds
+
 ### v2.5
 
 - Conditional `dbus-next` library importing

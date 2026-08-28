@@ -3,6 +3,7 @@
   <h1>🎵 SmileMPlayer 🎵</h1>
   <h3>A simple and modern playlist-focused local music player for Linux desktops.</h3>
   <p>SmileMPlayer is a simple and modern playlist-focused local music player for Linux with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, fully customizable UI, Material You theme by default, and so on.</p>
+  <h3>Available For <a href="#-install">Linux</a> & Windows</h2>
   <br></br>
   <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
 </div>
@@ -92,6 +93,8 @@ pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
 # 📦 Build by yourself
 
 _Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
+
+_For **Windows** build guide, see [WINDOWS-README.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/WINDOWS-README.md)._
 
 > Replace any `x.x` with the actual version tag.
 

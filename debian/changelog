@@ -1,3 +1,9 @@
+smilemplayer (2.6.b1-1) unstable; urgency=medium
+
+  * Testing windows builds
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sat, 29 Aug 2026 00:20:04 +0530
+
 smilemplayer (2.5-1) bookworm; urgency=medium
 
   * Conditional `dbus-next` library importing

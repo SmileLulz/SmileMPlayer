@@ -12,7 +12,7 @@ rpm/RPMS/
 rpm/SOURCES/
 rpm/SRPMS/
 review-smilemplayer/
-/*.spec
+# /*.spec
 /*.rpm
 flatpak-requirements.txt
 DEV-README.md

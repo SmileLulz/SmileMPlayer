@@ -98,7 +98,7 @@ Item {
                                 spacing: 10
 
                                 Text {
-                                    text: ""
+                                    text: "󰝚"
                                     color: index === Api.library.currentPlaylist
                                            ? Theme.color.accent
                                            : Theme.color.textSecondary

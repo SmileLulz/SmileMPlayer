@@ -343,6 +343,137 @@ jobs:
           path: dist/*.whl
           if-no-files-found: error
 
+  windows:
+    name: Build Windows packages
+    runs-on: windows-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.14'
+
+      - name: Install build dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install pyinstaller
+
+      - name: Build PyInstaller onedir
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force build, dist -ErrorAction SilentlyContinue
+
+          python -m PyInstaller `
+            --clean `
+            --noconfirm `
+            smilemplayer.spec
+
+          if (-not (Test-Path "dist\SmileMPlayer\SmileMPlayer.exe")) {
+            Write-Error "PyInstaller onedir build failed."
+            exit 1
+          }
+
+      - name: Create Windows ZIP
+        shell: pwsh
+        run: |
+          $version = python installer\get_version.py
+          $zip = "SmileMPlayer-$version-windows-x64.zip"
+
+          Compress-Archive `
+            -Path "dist\SmileMPlayer\*" `
+            -DestinationPath $zip `
+            -CompressionLevel Optimal
+
+          Write-Host "Created $zip"
+
+      - name: Build Inno Setup installer
+        shell: pwsh
+        run: |
+          $iscc = (Get-Command iscc.exe -ErrorAction Stop).Source
+
+          & $iscc `
+            "installer\SmileMPlayer.iss"
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Inno Setup failed."
+            exit $LASTEXITCODE
+          }
+
+      - name: Build PyInstaller onefile
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force build, dist
+
+          $env:SMILEMPLAYER_ONEFILE = "1"
+
+          python -m PyInstaller `
+            --clean `
+            --noconfirm `
+            smilemplayer.spec
+
+          Remove-Item Env:SMILEMPLAYER_ONEFILE
+
+          if (-not (Test-Path "dist\SmileMPlayer.exe")) {
+            Write-Error "PyInstaller onefile build failed."
+            exit 1
+          }
+
+      - name: Prepare Windows release artifacts
+        shell: pwsh
+        run: |
+          $version = python installer\get_version.py
+          $artifactDir = "windows-release"
+
+          New-Item -ItemType Directory -Force -Path $artifactDir | Out-Null
+
+          Copy-Item `
+            "SmileMPlayer-$version-windows-x64.zip" `
+            "$artifactDir\"
+
+          Copy-Item `
+            "dist\SmileMPlayer.exe" `
+            "$artifactDir\SmileMPlayer-$version-windows-x64.exe"
+
+          $installer = Get-ChildItem `
+            "installer" `
+            -Filter "SmileMPlayer-$version-windows-x64-setup.exe" `
+            -File `
+            -ErrorAction SilentlyContinue
+
+          if (-not $installer) {
+            $installer = Get-ChildItem `
+              "dist\installer" `
+              -Filter "SmileMPlayer-$version-windows-x64-setup.exe" `
+              -File `
+              -ErrorAction SilentlyContinue
+          }
+
+          if (-not $installer) {
+            Write-Error "Inno Setup installer was not found."
+            exit 1
+          }
+
+          Copy-Item `
+            $installer.FullName `
+            "$artifactDir\"
+
+          Get-ChildItem $artifactDir
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: smilemplayer-windows
+          path: windows-release/*
+          if-no-files-found: error
+
   release:
     name: Publish GitHub Release
     runs-on: ubuntu-latest
@@ -352,6 +483,7 @@ jobs:
       - debian
       - fedora
       - wheel
+      - windows
 
     permissions:
       contents: write
@@ -381,6 +513,12 @@ jobs:
           name: smilemplayer-python-wheel
           path: artifacts/python
 
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: smilemplayer-windows
+          path: artifacts/windows
+
       - name: Verify artifacts
         run: |
           set -e
@@ -397,17 +535,38 @@ jobs:
           echo "Python:"
           find artifacts/python -type f -print
 
+          echo "Windows:"
+          find artifacts/windows -type f -print
+
           test -n "$(find artifacts/arch \
-            -type f -name '*.pkg.tar.zst' -print -quit)"
+            -type f \
+            -name '*.pkg.tar.zst' \
+            -print -quit)"
 
           test -n "$(find artifacts/debian \
-            -type f -name '*.deb' -print -quit)"
+            -type f \
+            -name '*.deb' \
+            -print -quit)"
 
           test -n "$(find artifacts/fedora \
-            -type f -name '*.rpm' -print -quit)"
+            -type f \
+            -name '*.rpm' \
+            -print -quit)"
 
           test -n "$(find artifacts/python \
-            -type f -name '*.whl' -print -quit)"
+            -type f \
+            -name '*.whl' \
+            -print -quit)"
+
+          test -n "$(find artifacts/windows \
+            -type f \
+            -name '*.zip' \
+            -print -quit)"
+
+          test -n "$(find artifacts/windows \
+            -type f \
+            -name '*.exe' \
+            -print -quit)"
 
       - name: Create or update GitHub Release
         env:

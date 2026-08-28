@@ -11,6 +11,9 @@ from PySide6.QtCore import QCoreApplication, QStandardPaths, QUrl
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtQml import QQmlApplicationEngine
 
+if sys.platform.startswith("win"):
+    from PySide6.QtQuickControls2 import QQuickStyle
+
 from .core.library import LibraryManager
 from .core.player_backend import PlayerBackend
 from .core.settings import AppSettings
@@ -49,6 +52,10 @@ def main() -> int:
     QCoreApplication.setOrganizationName("SmileLulz")
     QCoreApplication.setOrganizationDomain("smilemplayer.local")
     QCoreApplication.setApplicationName("SmileMPlayer")
+
+    if sys.platform.startswith("win"):
+        QQuickStyle.setStyle("Fusion")
+
     parser = argparse.ArgumentParser(description="SmileMPlayer - A simple playlist-based local music player")
     parser.add_argument(
          "-gt", "--gen-theme",

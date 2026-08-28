@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.5
+Version:        2.6.b1
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -63,8 +63,5 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Fri Aug 28 2026 SmileLulz - 2.5-1
-- Conditional `dbus-next` library importing
-- Added bundled font only for Windows build (gonna test Windows build)
-- Updated DEPENDENCIES.md
-- Updated README.md
+* Sat Aug 29 2026 SmileLulz - 2.6.b1-1
+- Testing windows builds

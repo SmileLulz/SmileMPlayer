@@ -14,7 +14,7 @@ CONTROL_MAINTAINER="SmileLulz <SmileLulz@users.noreply.github.com>"
 CHANGELOG_MAINTAINER="SmileLulz <SmileLulz@users.noreply.github.com>"
 SPEC_PACKAGER="SmileLulz"
 
-DEBIAN_DISTRIBUTION="bookworm"
+DEBIAN_DISTRIBUTION="unstable"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'

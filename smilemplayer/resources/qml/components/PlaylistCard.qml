@@ -243,7 +243,7 @@ Rectangle {
 
                             Text {
                                 anchors.centerIn: parent
-                                text: ""
+                                text: "󰝚"
                                 color: Theme.color.textSecondary
                                 font.pixelSize: Theme.font.sizeL
                                 visible: artwork.status !== Image.Ready
