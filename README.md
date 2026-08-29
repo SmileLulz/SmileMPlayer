@@ -6,6 +6,8 @@
   <h3>Available For <a href="#-install">Linux</a> & <a href="#windows">Windows</a></h2>
   <br></br>
   <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
+  <br></br>
+  <h3><a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md">Wiki</a>  -  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md">Changelogs</a>  -  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WINDOWS-README.md">Windows ReadMe</a></h2>
 </div>
 
 <br></br>

@@ -269,7 +269,7 @@ Rectangle {
                     label: {
                         switch (Api.player.loopMode) {
                         case "track":
-                            return ""
+                            return "󰝚"
                         case "playlist":
                             return ""
                         default:

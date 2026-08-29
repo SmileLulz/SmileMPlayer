@@ -1,3 +1,12 @@
+smilemplayer (2.7-1) bookworm; urgency=medium
+
+  * Loop icon fix for Windows build
+  * Updated `WIKI.md`
+  * Updated `README.md`
+  * Updated `WINDOWS-README.md`
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sat, 29 Aug 2026 05:35:27 +0530
+
 smilemplayer (2.6-1) bookworm; urgency=medium
 
   * Added Windows build support

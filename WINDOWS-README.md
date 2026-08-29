@@ -1,11 +1,9 @@
 <div align="center">
   <h1>Build For Windows</h1>
+  <h3>This guide is for Terminal/Powershell, not CMD</h3>
 </div>
 
 <br></br>
-
-> [!NOTE]
-> This guide is for Terminal/Powershell, not CMD.
 
 # 📝 Useful Commands
 

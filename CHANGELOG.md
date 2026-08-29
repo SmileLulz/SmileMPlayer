@@ -1,5 +1,12 @@
 # Changelogs
 
+### v2.7
+
+- Loop icon fix for Windows build
+- Updated `WIKI.md`
+- Updated `README.md`
+- Updated `WINDOWS-README.md`
+
 ### v2.6
 
 - Added Windows build support

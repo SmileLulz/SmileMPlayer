@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.6
+Version:        2.7
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -63,8 +63,8 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Sat Aug 29 2026 SmileLulz - 2.6-1
-- Added Windows build support
-- Added a separate `WINDOWS-README.md` for Windows build guide
+* Sat Aug 29 2026 SmileLulz - 2.7-1
+- Loop icon fix for Windows build
+- Updated `WIKI.md`
 - Updated `README.md`
-- Some useful project changes
+- Updated `WINDOWS-README.md`

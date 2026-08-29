@@ -12,7 +12,11 @@ smilemplayer --help # or -h
 
 ### Config
 
-Config file is generated automatically on first launch. It's located in `~/.config/SmileMPlayer/config.json`.
+Config file is generated automatically on first launch.
+
+Location (Linux): `~/.config/SmileMPlayer/config.json`
+
+Location (Windows): `C:\Users\<Username>\AppData\Local\SmileMPlayer\config.json`
 
 | Key                           | Description                        | Default value | Available values                                   |
 | ----------------------------- | ---------------------------------- | ------------- | -------------------------------------------------- |
@@ -30,6 +34,11 @@ Config file is generated automatically on first launch. It's located in `~/.conf
 | `sort_desc`                   | Sort descend/inverse               | `false`       | `true`, `false`                                    |
 | `theme`                       | Custom theme file (.qml) path      | `""` (empty)  |                                                    |
 | `volume`                      | Current volume                     | `0.5`         | `0.0` - `1.0`                                      |
+
+> [!NOTE]
+> For any path string in config file, use double backslash
+>
+> For example: `"theme": "C:\\Users\\<Username>\\AppData\\Local\\SmileMPlayer\\theme\\Main.qml"`
 
 Default generated config template:
 
