@@ -1,8 +1,8 @@
 <div align="center">
   <img alt="SmileMPlayer Logo" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/data/icons/smilemplayer-512.png" width="150px"/>
   <h1>🎵 SmileMPlayer 🎵</h1>
-  <h3>A simple and modern playlist-focused local music player for Linux desktops.</h3>
-  <p>SmileMPlayer is a simple and modern playlist-focused local music player for Linux with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, fully customizable UI, Material You theme by default, and so on.</p>
+  <h3>A simple and modern playlist-focused local music player.</h3>
+  <p>SmileMPlayer is a simple and modern playlist-focused local music player with LRC sidecar lyrics support, ReplayGain 2.0 support, MPRIS integration, fully customizable UI, Material You style by default, and so on.</p>
   <h3>Available For <a href="#-install">Linux</a> & <a href="#windows">Windows</a></h2>
   <br></br>
   <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
@@ -37,15 +37,15 @@
 
 You'll have to install a nerd font for icon support if you don't have any. The recommended option is **[JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads)**.
 
-You don't need install it manually on any **Arch Linux** distribution; since the `ttf-jetbrains-mono-nerd` package is available in **Extra & AUR**. So it will be automatically installed.
+You don't need to install the font manually on any **Arch Linux** distribution; since the `ttf-jetbrains-mono-nerd` package is available in **Extra & AUR**. So it will be automatically installed.
 
-Below command will install the **JetBrainsMono Nerd Font**; in/for other distros.
+Below command will install the **JetBrainsMono Nerd Font**; for other distros.
 
 ```sh
 mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
 ```
 
-See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md) for more dependency information.
+**See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md) for more dependency information.**
 
 
 # 📥 Install
