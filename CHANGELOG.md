@@ -1,5 +1,13 @@
 # Changelogs
 
+### v2.8
+
+- Changed Windows config path to `C:\\Users\\<Username>\\.config\\SmileMPlayer\\`
+- Made playlist removal button visible by default
+- Added `-v, --version`
+- Updated `README.md`
+- Updated `WIKI.md`
+
 ### v2.7
 
 - Loop icon fix for Windows build

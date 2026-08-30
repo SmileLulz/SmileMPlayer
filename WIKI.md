@@ -1,5 +1,6 @@
 # 📖 Wiki
 
+
 ### CLI Usage
 
 ```sh
@@ -10,13 +11,14 @@ smilemplayer --gen-theme # or -gt
 smilemplayer --help # or -h
 ```
 
+
 ### Config
 
 Config file is generated automatically on first launch.
 
 Location (Linux): `~/.config/SmileMPlayer/config.json`
 
-Location (Windows): `C:\Users\<Username>\AppData\Local\SmileMPlayer\config.json`
+Location (Windows): `C:\\Users\\<Username>\\.config\\SmileMPlayer\\config.json`
 
 | Key                           | Description                        | Default value | Available values                                   |
 | ----------------------------- | ---------------------------------- | ------------- | -------------------------------------------------- |
@@ -34,11 +36,6 @@ Location (Windows): `C:\Users\<Username>\AppData\Local\SmileMPlayer\config.json`
 | `sort_desc`                   | Sort descend/inverse               | `false`       | `true`, `false`                                    |
 | `theme`                       | Custom theme file (.qml) path      | `""` (empty)  |                                                    |
 | `volume`                      | Current volume                     | `0.5`         | `0.0` - `1.0`                                      |
-
-> [!NOTE]
-> For any path string in config file, use double backslash
->
-> For example: `"theme": "C:\\Users\\<Username>\\AppData\\Local\\SmileMPlayer\\theme\\Main.qml"`
 
 Default generated config template:
 
@@ -59,3 +56,19 @@ Default generated config template:
   "volume": 0.5
 }
 ```
+
+
+### Theme
+
+Theme files are generated using `--gen-theme` (or `-gt`) argument.
+
+Location (Linux): `~/.config/SmileMPlayer/theme/`
+
+Location (Windows): `C:\\Users\\<Username>\\.config\\SmileMPlayer\\theme\\`
+
+
+### Note (For Windows)
+
+For any path string in the config file, use double backslash.
+
+For example: `"theme": "C:\\Users\\<Username>\\.config\\SmileMPlayer\\theme\\Main.qml"`

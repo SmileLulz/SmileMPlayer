@@ -1,3 +1,13 @@
+smilemplayer (2.8-1) bookworm; urgency=medium
+
+  * Changed Windows config path to `C:\\Users\\<Username>\\.config\\SmileMPlayer\\`
+  * Made playlist removal button visible by default
+  * Added `-v, --version`
+  * Updated `README.md`
+  * Updated `WIKI.md`
+
+ -- SmileLulz <SmileLulz@users.noreply.github.com>  Sun, 30 Aug 2026 18:08:08 +0530
+
 smilemplayer (2.7-1) bookworm; urgency=medium
 
   * Loop icon fix for Windows build

@@ -1,6 +1,5 @@
 # TODO
 
-- Make the `SplitView`s percentage based sizing for a responsive layout in most resolution out-of-the-box
 - Make the playlist removal button visible
 - Fix Windows build is not having icon on the title bar
 - Update screenshot in README.md

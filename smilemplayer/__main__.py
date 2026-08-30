@@ -5,7 +5,9 @@ import importlib
 import os
 import shutil
 import sys
+
 from pathlib import Path
+from importlib.metadata import version
 
 from PySide6.QtCore import QCoreApplication, QStandardPaths, QUrl
 from PySide6.QtGui import QGuiApplication
@@ -56,7 +58,14 @@ def main() -> int:
     if sys.platform.startswith("win"):
         QQuickStyle.setStyle("Fusion")
 
-    parser = argparse.ArgumentParser(description="SmileMPlayer - A simple playlist-based local music player")
+    parser = argparse.ArgumentParser(description="SmileMPlayer - A simple and modern playlist-focused local music player")
+
+    parser.add_argument(
+        "-v", "--version",
+        action="version",
+        version=f"SmileMPlayer {version('smilemplayer')}",
+    )
+
     parser.add_argument(
          "-gt", "--gen-theme",
         action="store_true",
@@ -64,7 +73,8 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    config_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.ConfigLocation)) / "SmileMPlayer"
+    config_dir = Path.home() / ".config" / "SmileMPlayer"
+
     if args.gen_theme:
         source_root = Path(__file__).resolve().parent / "resources" / "qml"
         target_root = config_dir / "theme"

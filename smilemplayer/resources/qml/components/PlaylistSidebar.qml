@@ -102,7 +102,7 @@ Item {
                                     color: index === Api.library.currentPlaylist
                                            ? Theme.color.accent
                                            : Theme.color.textSecondary
-                                    font.pixelSize: Theme.font.sizeM
+                                    font.pixelSize: Theme.font.sizeL
                                 }
 
                                 Text {
@@ -122,7 +122,6 @@ Item {
                                     label: ""
                                     fontSize: Theme.font.sizeXL
                                     padding: 8
-                                    opacity: hovered ? 1 : 0
                                     onClicked: Api.library.removePlaylist(index)
                                 }
                             }
