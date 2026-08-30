@@ -344,11 +344,8 @@ python -m pip install -e .
 </details>
 
 
-<details>
-<summary><h1>🧾 License</h1></summary>
+# 🧾 License
 
 This project is licensed under the GNU General Public License v3.0 only.
 
 Also see [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md).
-
-</details>
