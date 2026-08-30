@@ -7,19 +7,38 @@
   <br></br>
   <img alt="Screenshot" src="https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/refs/heads/main/Screenshots/0.png" width="80%" />
   <br></br>
-  <h3><a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md">Wiki</a>  -  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md">Changelogs</a>  -  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WINDOWS-README.md">Windows ReadMe</a></h2>
+  <h3><a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WIKI.md">Wiki</a>  &ensp;  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/CHANGELOG.md">Changelogs</a>  &ensp;  <a href="https://github.com/SmileLulz/SmileMPlayer/blob/main/WINDOWS-README.md">Windows Readme</a></h2>
 </div>
 
 <br></br>
 
 > [!NOTE]
-> This project was meant to be a personal project, but feel happy to share it with others. Therefore, I am not accepting contributions. Thank you. Hope you like my app :)
+> This project was meant to be a personal project, but I'm feeling happy to share it with others. Therefore, I am not accepting contributions. Thank you. Hope you like this simple music player :)
+
+<details>
+<summary><h1>📚 Table of contents</h1></summary>
+
+- [✨ Features](#-features)
+- [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes)
+- 📥 [Install](#-install)
+    - [Linux](#linux-1)
+    - [Windows](#windows)
+- [📦 Build by yourself](#-build-by-yourself)
+    - [Clone the repository](#clone-the-repository)
+    - [Running directly](#running-directly)
+    - [Build for Arch Linux](#build-for-arch-linux)
+    - [Build for Debian](#build-for-debian)
+    - [Build for Fedora](#build-for-fedora)
+    - [Build for python pip](#build-for-python-pip)
+- [🧾 License](#-license)
+
+</details>
 
 # ✨ Features
 
 - Fully customizable/themable via QML
-- Material You theme by default
-- Folder-based playlist management
+- Material You style by default
+- Folders as playlists
 - Tracks sorting
 - LRC sidecar lyrics support
 - ReplayGain 2.0 support
@@ -35,24 +54,27 @@
 > [!WARNING]
 > It is not recommended to install with `pip`. Installing with python `pip` won't install the system dependencies, you'll have to install them manually.
 
+### Linux
+
 You'll have to install a nerd font for icon support if you don't have any. The recommended option is **[JetBrainsMono Nerd Font](https://www.nerdfonts.com/font-downloads)**.
 
-You don't need to install the font manually on any **Arch Linux** distribution; since the `ttf-jetbrains-mono-nerd` package is available in **Extra & AUR**. So it will be automatically installed.
+For any **Arch Linux** distribution, you don't need to install the nerd font manually; since the `ttf-jetbrains-mono-nerd` package is available in **Extra & AUR**. So it will be automatically installed.
 
-Below command will install the **JetBrainsMono Nerd Font**; for other distros.
+Below command will install the **JetBrainsMono Nerd Font**; for any other distros that uses `fc-cache`.
 
 ```sh
 mkdir -p ~/.local/share/fonts && cd ~/.local/share/fonts && wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip && unzip -o JetBrainsMono.zip && fc-cache -fv
 ```
 
-**See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md) for more dependency information.**
+**See [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md) for more information.**
 
 
 # 📥 Install
 
 _Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
 
-### (Linux) For any distro
+<details>
+<summary><h3>Linux</h3></summary>
 
 This will install the latest release on any distribution (Arch, Debain, Fedora based distros; but sadly not for Void Linux yet).
 
@@ -62,7 +84,7 @@ Install:
 curl -fsSL https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/main/install.sh | bash
 ```
 
-But if you want to inspect the installation script first:
+OR, if you want to inspect the installation script first:
 
 ```bash
 # Download the script
@@ -75,43 +97,65 @@ less install.sh
 bash install.sh
 ```
 
-### Windows
+</details>
+
+<details>
+<summary><h3>Windows</h3></summary>
 
 > [!NOTE]
-> There are three types of files you can download, CHOOSE ONE.
+> There are three ways to download/install, CHOOSE ONE.
 
 Go to [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
 
-Option 1: Installer setup (recommended):
+**Option 1: Installer (recommended):**
 
-- Download the `SmileMPlayer-x.x-windows-x64-setup.exe` file and install it.
+Install:
 
-Option 2: Standalone `exe`:
+```powershell
+irm https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/main/install-win.ps1 | iex
+```
+
+OR, if you want to inspect the installation script first:
+
+```powershell
+# Download the script
+irm https://raw.githubusercontent.com/SmileLulz/SmileMPlayer/main/install-win.ps1 -OutFile install-win.ps1
+
+# Inspect
+notepad .\install-win.ps1
+
+# Then you can install with the downloaded script
+.\install-win.ps1
+```
+
+You can also keep this script for checking or installing future updates directly. You can run these commands:
+
+```powershell
+# Show help message
+.\install-win.ps1 -Help  # Or -h
+
+# Check for latest update
+.\install-win.ps1 -CheckUpdate  # Or -cu
+
+# Install latest version
+.\install-win.ps1
+
+# Download and varify the installer without installing it
+.\install-win.ps1 -DryRun  # Or -dr
+```
+
+**Option 2: Portable/standalone `exe`:**
 
 - Download the `SmileMPlayer-x.x-windows-x64.exe` file and run it directly.
 
-Option 3: `zip` archive:
+**Option 3: Portable `zip` archive:**
 
 - Download the `SmileMPlayer-x.x-windows-x64.zip` file, extract it anywhere, then run the `SmileMPlayer.exe`.
 
-### (Linux) Python PIP
+</details>
 
-> Replace any `x.x` with the actual version tag.
-
-1. Download the `.whl` file from [Releases](https://github.com/SmileLulz/SmileMPlayer/releases) page.
-
-2. Install:
-
-```sh
-# Install
-pip install /path/to/smilemplayer-x.x-py3-none-any.whl
-
-# Or install for current user only
-pip install --user /path/to/smilemplayer-x.x-py3-none-any.whl
-```
-
-
-# 📦 Build by yourself
+<details>
+<summary><h1>📦 Build by yourself</h1></summary>
 
 _Make sure you've read the [🔗 ( IMPORTANT ) Dependency Notes](#--important--dependency-notes) section._
 
@@ -131,7 +175,8 @@ git clone https://github.com/SmileLulz/SmileMPlayer.git && cd SmileMPlayer
 python -m smilemplayer
 ```
 
-### Build for Arch Linux
+<details>
+<summary><h3>Build for Arch Linux</h3></summary>
 
 Build dependencies:
 
@@ -159,7 +204,10 @@ makepkg -s
 sudo pacman -U smilemplayer-x.x-1-any.pkg.tar.zst
 ```
 
-### Build for Debian
+</details>
+
+<details>
+<summary><h3>Build for Debian</h3></summary>
 
 Build dependencies:
 
@@ -187,7 +235,10 @@ dpkg-buildpackage -b -us -uc
 sudo apt install ../smilemplayer_x.x-1_all.deb
 ```
 
-### Build for Fedora
+</details>
+
+<details>
+<summary><h3>Build for Fedora</h3></summary>
 
 Build dependencies:
 
@@ -265,7 +316,10 @@ rpmbuild --define "_topdir $PWD/rpm" -ba rpm/SPECS/smilemplayer.spec
 sudo dnf install rpm/RPMS/noarch/smilemplayer-x.x-1.fcxx.noarch.rpm
 ```
 
-### Build for python pip
+</details>
+
+<details>
+<summary><h3>Build for python pip</h3></summary>
 
 _Not recommended._
 
@@ -286,9 +340,15 @@ Or install locally for development puposes:
 python -m pip install -e .
 ```
 
+</details>
+</details>
 
-# 🧾 License
+
+<details>
+<summary><h1>🧾 License</h1></summary>
 
 This project is licensed under the GNU General Public License v3.0 only.
 
 Also see [DEPENDENCIES.md](https://github.com/SmileLulz/SmileMPlayer/blob/main/DEPENDENCIES.md).
+
+</details>

@@ -1,5 +1,11 @@
 # Changelogs
 
+### v2.9
+
+- Added `install-win.ps1` script in project for installing the app easily on Windows
+- Updated `README.md`
+- Updated `WIKI.md`
+
 ### v2.8
 
 - Changed Windows config path to `C:\\Users\\<Username>\\.config\\SmileMPlayer\\`

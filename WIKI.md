@@ -9,6 +9,9 @@ smilemplayer --gen-theme # or -gt
 
 # Show help message
 smilemplayer --help # or -h
+
+# Show version
+smilemplayer --version # or -v
 ```
 
 
@@ -67,7 +70,7 @@ Location (Linux): `~/.config/SmileMPlayer/theme/`
 Location (Windows): `C:\\Users\\<Username>\\.config\\SmileMPlayer\\theme\\`
 
 
-### Note (For Windows)
+### Note (for Windows)
 
 For any path string in the config file, use double backslash.
 

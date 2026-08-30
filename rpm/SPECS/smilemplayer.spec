@@ -1,5 +1,5 @@
 Name:           smilemplayer
-Version:        2.8
+Version:        2.9
 Release:        1%{?dist}
 Summary:        Modern playlist-based local music player
 
@@ -63,9 +63,7 @@ appstreamcli validate \
 %{_metainfodir}/io.github.SmileLulz.SmileMPlayer.metainfo.xml
 
 %changelog
-* Sun Aug 30 2026 SmileLulz - 2.8-1
-- Changed Windows config path to `C:\\Users\\<Username>\\.config\\SmileMPlayer\\`
-- Made playlist removal button visible by default
-- Added `-v, --version`
+* Sun Aug 30 2026 SmileLulz - 2.9-1
+- Added `install-win.ps1` script in project for installing the app easily on Windows
 - Updated `README.md`
 - Updated `WIKI.md`
