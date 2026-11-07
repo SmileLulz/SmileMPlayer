@@ -1,5 +1,6 @@
 # TODO
 
+- Add search
 - Fix Windows build is not having icon on the title bar (IMPORTANT)
 - Add wiki in GitHub repo's wiki?
 - Add documentation of APIs for frontend in wiki
